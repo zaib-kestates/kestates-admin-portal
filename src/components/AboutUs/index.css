@@ -1,0 +1,9 @@
+.image-aboutus-team > img {
+  cursor: pointer;
+  height: 270px;
+  width: 100%;
+}
+
+#team {
+  height: 87%;
+}

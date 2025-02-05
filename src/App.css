@@ -1,0 +1,173 @@
+html {
+  height: 100%;
+}
+
+.dv-main {
+  min-height: 100%;
+}
+
+.App {
+  text-align: center;
+}
+
+.dv-contents {
+  padding: 1.7rem 35px;
+  width: 88%;
+}
+
+.page-header {
+  background: #e1f6f9;
+  border-radius: 3px;
+  color: black;
+  display: block;
+  font-size: 15px;
+  font-weight: 501;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+}
+
+.page-subheader {
+  border-bottom: 1px solid;
+  display: block;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.p-float-label > label {
+  font-size: 0.9rem;
+}
+
+form label {
+  color: black;
+  font-size: 14.2px;
+  letter-spacing: 0.4px;
+  margin-bottom: 3px;
+}
+
+form .form-control {
+  color: #4d5053;
+  font-size: 14.2px;
+}
+
+textarea.p-inputtextarea {
+  resize: none;
+}
+
+button.p-button {
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: normal;
+  letter-spacing: 0.4px;
+  min-width: 4.5rem;
+  padding: 5px 13px;
+}
+
+form button.p-button {
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+div.p-fileupload svg {
+  display: none;
+}
+
+span.p-fileupload-choose {
+  font-size: 13px;
+  min-width: 4.5rem;
+  padding: 5px 13px;
+}
+
+iframe {
+  height: 250px;
+  width: 100%;
+}
+
+.img-banner img {
+  cursor: pointer;
+  height: 300px;
+  width: 100%;
+}
+
+table td {
+  color: #4d5053;
+  font-size: 14px;
+  padding: 15px 1rem;
+  vertical-align: baseline;
+}
+
+table th {
+  background-color: #e1f6f9;
+  color: black;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 14px 16px;
+}
+
+.p-dropdown,
+.p-multiselect {
+  width: 100%;
+}
+
+.p-dropdown .p-dropdown-label,
+.p-dropdown .p-dropdown-label.p-placeholder,
+.p-multiselect .p-multiselect-label {
+  color: #4d5053;
+  font-size: 14.2px;
+  padding: 0.375rem 0.75rem;
+}
+
+.p-dialog-header {
+  padding-bottom: 8px;
+}
+
+.image-team > img {
+  border-radius: 50%;
+  cursor: pointer;
+  height: 153px;
+  width: 11rem;
+}
+
+.link-edit {
+  background: #06b6d4;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 6px 12px;
+  text-decoration: none;
+}
+
+.action-column {
+  width: '9%';
+}
+
+.p-message-wrapper {
+  font-size: 15px;
+  padding: 10px 15px;
+}
+
+.p-icon.p-message-icon {
+  height: 1.2rem;
+  margin-right: 3px;
+  width: 1rem;
+}
+
+.p-message-detail {
+  font-weight: 500;
+}
+
+.p-component.p-message-enter-done {
+  margin-bottom: 12px;
+}
+
+input[type='file'] {
+  display: none;
+}
+
+video {
+  object-fit: fill;
+}

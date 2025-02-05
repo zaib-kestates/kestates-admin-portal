@@ -1,0 +1,21 @@
+.ul-sidebar {
+  background-color: rgba(0, 0, 0, 0.54);
+  list-style: none;
+  padding: 0px;
+  width: 12%;
+}
+
+.ul-sidebar a {
+  color: white;
+  display: block;
+  font-size: 0.95rem;
+  padding: 4px 20px;
+  text-decoration: none;
+}
+
+.ul-sidebar a:hover,
+.ul-sidebar a.active {
+  background-color: #e1f6f9;
+  color: black;
+  font-weight: 600;
+}
