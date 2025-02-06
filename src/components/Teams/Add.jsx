@@ -12,8 +12,26 @@ import ProfilePicture from '../../assets/user-prof.png';
 import { saveData } from '../../services/Team';
 import { teamObject } from '../../constants';
 import { populateFormData } from '../../helpers';
+import { useForm } from 'react-hook-form';
 
 function AddTeam() {
+  const {
+    register,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
+      name: '',
+      title: '',
+      message: '',
+      email: '',
+      contact_number: '',
+      slug: '',
+      DepartmentId: '',
+      LanguageIds: '',
+    },
+  });
   const navigate = useNavigate();
   const imageRef = useRef(null);
   const [team, setTeam] = useState(teamObject);
@@ -68,14 +86,28 @@ function AddTeam() {
       <form>
         <div className="row">
           <div className="col-md-6 text-center">
-            <Image
-              src={file}
-              className="image-team"
-              onClick={() => imageRef.current.click()}
-            />
+
+            <div className="upload-image-wrapper animation">
+              <Image
+                src={file}
+                className="image-team"
+                onClick={() => imageRef.current.click()}
+              />
+              <label htmlFor="profile-image" className="overlay animation">
+                <div className="text text-center">
+                  <h6 className="">
+                    Click to upload a new Photo!
+                  </h6>
+                  <div className="">
+                    <small>Recommended Size : 1280x960</small>
+                  </div>
+                </div>
+              </label>
+            </div>
             <div className="d-flex justify-content-end">
               <input
                 ref={imageRef}
+                id='profile-image'
                 type="file"
                 className="mt-2 pe-0"
                 onChange={handleFileChange}

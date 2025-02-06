@@ -57,16 +57,16 @@ function AboutUs() {
   };
 
   // Save click handler
-  const save = async (e) => {
-    e.preventDefault();
+  const save = async (data) => {
+    // e.preventDefault();
 
     // Add data in form object (for images)
     const formData = new FormData();
-    formData.append('header', data.metadata.header);
-    formData.append('title', data.metadata.title);
-    formData.append('description', data.metadata.description);
-    formData.append('about', data.pageData[0].value);
-    formData.append('team', data.pageData[1].value);
+    formData.append('header', data.header);
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('about', data.about);
+    formData.append('team', data.team);
     formData.append('file1', file1);
     formData.append('file2', file2);
 
