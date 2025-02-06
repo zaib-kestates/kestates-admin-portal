@@ -7,8 +7,24 @@ import { Messages } from 'primereact/messages';
 import { messageTemplate } from '../../constants';
 import { getData, saveData } from '../../services/AboutUs';
 import './index.css';
+import { useForm } from 'react-hook-form';
 
 function AboutUs() {
+  const {
+    register,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
+      header: '',
+      title: '',
+      description: '',
+      about: '',
+      team: '',
+    },
+  });
+
   const bannerRef = useRef(null);
   const teamImageRef = useRef(null);
   const message = useRef(null);
@@ -65,6 +81,12 @@ function AboutUs() {
     setData(data);
     setBanner(data.images[0].picture);
     setTeamImage(data.images[1].picture);
+
+    setValue('header', data.metadata.header);
+    setValue('title', data.metadata.title);
+    setValue('description', data.metadata.description);
+    setValue('about', data.pageData[0].value);
+    setValue('team', data.pageData[1].value);
   };
 
   // Get data
@@ -82,17 +104,31 @@ function AboutUs() {
 
       {/* About */}
       <label className="page-subheader">About</label>
-      <form>
+      <form onSubmit={handleSubmit(save)}>
         <div className="row">
           <div className="col-md-12">
-            <Image
-              src={banner}
-              className="img-banner"
-              onClick={() => bannerRef.current.click()}
-            />
+            <div className="upload-image-wrapper animation">
+              <Image
+                src={banner}
+                className="img-banner"
+                onClick={() => bannerRef.current.click()}
+              />
+              <label htmlFor="banner-image" className="overlay animation">
+                <div className="text text-center">
+                  <h6 className="">
+                    Click to upload a new Photo!
+                  </h6>
+                  <div className="">
+                    <small>Recommended Size : 1280x960</small>
+                  </div>
+                </div>
+              </label>
+            </div>
             <input
               type="file"
+              id="banner-image"
               ref={bannerRef}
+              accept='image/*'
               onChange={(e) => {
                 setBanner(URL.createObjectURL(e.target.files[0]));
                 setFile1(e.target.files[0]);
@@ -101,31 +137,45 @@ function AboutUs() {
           </div>
           <div className="col-md-12 mt-2">
             <label htmlFor="about" className="control-label">
-              About
+              About <span className="required"> * </span>
             </label>
             <InputTextarea
               name="about"
               className="form-control"
               rows={8}
-              value={data.pageData[0].value}
-              onChange={(e) => updatePageData(e, 0)}
+              {...register('about', {
+                required: 'About text is required',
+              })}
             ></InputTextarea>
+            {errors.about && <div className='field-error'><span>{errors.about?.message}</span></div>}
           </div>
         </div>
-      </form>
 
-      {/* Team */}
-      <label className="page-subheader mt-3 pt-2">Team</label>
-      <form>
+        {/* Team */}
+        <label className="page-subheader mt-3 pt-2">Team  <span className="required"> * </span></label>
         <div className="row">
           <div className="col-md-3">
-            <Image
-              src={teamImage}
-              className="image-aboutus-team"
-              onClick={() => teamImageRef.current.click()}
-            />
+            <div className="upload-image-wrapper">
+              <Image
+                src={teamImage}
+                className="image-aboutus-team"
+                onClick={() => teamImageRef.current.click()}
+              />
+              <label htmlFor="team-image" className="overlay animation">
+                <div className="text text-center">
+                  <h6 className="">
+                    Click to upload a new Photo!
+                  </h6>
+                  <div className="">
+                    <small>Recommended Size : 300x400</small>
+                  </div>
+                </div>
+              </label>
+            </div>
             <input
               type="file"
+              id='team-image'
+              accept='image/*'
               ref={teamImageRef}
               onChange={(e) => {
                 setTeamImage(URL.createObjectURL(e.target.files[0]));
@@ -136,51 +186,61 @@ function AboutUs() {
           <div className="col-md-9 mt-2">
             <InputTextarea
               name="team"
+              id='team'
               className="form-control"
               rows={5}
-              value={data.pageData[1].value}
-              onChange={(e) => updatePageData(e, 1)}
+              {...register('team', {
+                required: 'Team text is required',
+              })}
             ></InputTextarea>
+            {errors.team && <div className='field-error'><span>{errors.team?.message}</span></div>}
           </div>
         </div>
-      </form>
 
-      {/* Metadata */}
-      <label className="page-subheader mt-3 pt-2">Meatadata</label>
-      <form>
+        {/* Metadata */}
+        <label className="page-subheader mt-3 pt-2">Meatadata</label>
         <div className="row">
           <div className="col-md-6">
             <label htmlFor="title" className="control-label">
-              Title
+              Title <span className="required"> * </span>
             </label>
             <InputText
               name="title"
+              id='title'
               className="form-control"
-              value={data.metadata.title}
-              onChange={updateMetadata}
+              {...register('title', {
+                required: 'Title is required',
+              })}
             ></InputText>
+            {errors.title && <div className='field-error'><span>{errors.title?.message}</span></div>}
           </div>
           <div className="col-md-6">
-            <label htmlFor="header">Header</label>
+            <label htmlFor="header">Header <span className="required"> * </span></label>
             <InputText
               name="header"
+              id='header'
               className="form-control"
-              value={data.metadata.header}
-              onChange={updateMetadata}
+              {...register('header', {
+                required: 'Header is required',
+              })}
             ></InputText>
+            {errors.header && <div className='field-error'><span>{errors.header?.message}</span></div>}
           </div>
           <div className="col-md-12 mt-2 pt-2">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">Description <span className="required"> * </span></label>
             <InputTextarea
               name="description"
+              id='description'
               className="form-control"
               rows={5}
-              value={data.metadata.description}
-              onChange={updateMetadata}
+              {...register('description', {
+                required: 'Description is required',
+              })}
             ></InputTextarea>
+            {errors.description && <div className='field-error'><span>{errors.description?.message}</span></div>}
           </div>
           <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
-            <Button label="Save" onClick={save} />
+            <Button label="Save" type='submit' />
           </div>
         </div>
       </form>

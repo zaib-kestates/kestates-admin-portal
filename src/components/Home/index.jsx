@@ -134,7 +134,7 @@ function Home() {
         <div className="row mt-3 pt-2">
           <div className="col-md-12">
             <label htmlFor="our_story" className="control-label">
-              Our Story
+              Our Story <span className="required"> * </span>
             </label>
             <InputTextarea
               id="our_story"
@@ -142,7 +142,7 @@ function Home() {
               rows={8}
               {...register('our_story', { required: 'Our story is required' })}
             ></InputTextarea>
-            {errors.our_story && <span>{errors.our_story?.message}</span>}
+            {errors.our_story && <div className='field-error'><span>{errors.our_story?.message}</span></div>}
           </div>
         </div>
 
@@ -151,35 +151,38 @@ function Home() {
         <div className="row">
           <div className="col-md-6">
             <label htmlFor="title" className="control-label">
-              Title
+              Title <span className="required"> * </span>
             </label>
             <InputText
               name="title"
+              id='title'
               className="form-control"
               {...register('title', { required: 'Title is required' })}
             ></InputText>
-            {errors.title && <span>{errors.title?.message}</span>}
+            {errors.title && <div className='field-error'><span>{errors.title?.message}</span></div>}
           </div>
           <div className="col-md-6">
-            <label htmlFor="header">Header</label>
+            <label htmlFor="header">Header <span className="required"> * </span></label>
             <InputText
               name="header"
+              id='header'
               className="form-control"
               {...register('header', { required: 'Header is required' })}
             ></InputText>
-            {errors.header && <span>{errors.header?.message}</span>}
+            {errors.header && <div className='field-error'><span>{errors.header?.message}</span></div>}
           </div>
           <div className="col-md-12 mt-2 pt-2">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">Description <span className="required"> * </span></label>
             <InputTextarea
               name="description"
+              id='description'
               className="form-control"
               rows={5}
               {...register('description', {
                 required: 'Description is required',
               })}
             ></InputTextarea>
-            {errors.description && <span>{errors.description?.message}</span>}
+            {errors.description && <div className='field-error'><span>{errors.description?.message}</span></div>}
           </div>
           <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
             <Button label="Save" />

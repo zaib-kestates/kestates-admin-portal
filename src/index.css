@@ -15,11 +15,15 @@ body {
   height: 100%;
 }
 
-#root > div {
+#root>div {
   display: inline;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --color-error: #ff4141;
 }
