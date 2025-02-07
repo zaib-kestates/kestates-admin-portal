@@ -11,6 +11,9 @@ import useFetchDepartments from '../../hooks/useFetchDepartments';
 import useFetchLanguages from '../../hooks/useFetchLanguages';
 import { populateFormData } from '../../helpers';
 import { useForm } from 'react-hook-form';
+import { hasFileValidationErrors } from '../../utils/helpers';
+import { Messages } from 'primereact/messages';
+import { messageTemplate } from '../../constants';
 
 function EditTeam() {
   const {
@@ -32,6 +35,7 @@ function EditTeam() {
   });
   const navigate = useNavigate();
   const imageRef = useRef(null);
+  const message = useRef(null);
   const [team, setTeam] = useState();
   const [file, setFile] = useState();
   const departments = useFetchDepartments();
@@ -40,8 +44,16 @@ function EditTeam() {
 
   // Handle file upload
   const handleFileChange = (e) => {
-    setFile(URL.createObjectURL(e.target.files[0]));
-    setTeam({ ...team, file: e.target.files[0] });
+    let file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    const fileValidationErrors = hasFileValidationErrors(file, "image");
+    if (!!fileValidationErrors) {
+      return message.current.show(messageTemplate('error', fileValidationErrors));
+    }
+    setFile(URL.createObjectURL(file));
+    setTeam({ ...team, file: file });
   };
 
   // Cancel click handler
@@ -69,6 +81,11 @@ function EditTeam() {
     team.LanguageIds.forEach((languageId) =>
       formData.append('LanguageIds[]', languageId)
     );
+    if (file) {
+      console.log(file);
+      
+      formData.append('file', file)
+    }
 
     await updateData(id, formData);
     navigate('/teams', {
@@ -104,6 +121,8 @@ function EditTeam() {
     <>
       <label className="page-header">Edit Team</label>
 
+      <Messages ref={message} />
+
       <form onSubmit={handleSubmit(save)}>
         <div className="row">
           <div className="col-md-6 text-center">
@@ -127,6 +146,7 @@ function EditTeam() {
             <div className="d-flex justify-content-end">
               <input
                 id='profile-image'
+                accept='image/*'
                 ref={imageRef}
                 type="file"
                 className="mt-2 pe-0"

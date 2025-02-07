@@ -8,6 +8,7 @@ import { messageTemplate } from '../../constants';
 import { getData, saveData } from '../../services/AboutUs';
 import './index.css';
 import { useForm } from 'react-hook-form';
+import { hasFileValidationErrors } from '../../utils/helpers';
 
 function AboutUs() {
   const {
@@ -33,6 +34,24 @@ function AboutUs() {
   const [teamImage, setTeamImage] = useState();
   const [file1, setFile1] = useState();
   const [file2, setFile2] = useState();
+
+  const handleFileUpload = (e, fileIndex) => {
+    let file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    const fileValidationErrors = hasFileValidationErrors(file, "image");
+    if (!!fileValidationErrors) {
+      return message.current.show(messageTemplate('error', fileValidationErrors));
+    }
+    if (fileIndex === 1) {
+      setBanner(URL.createObjectURL(file));
+      setFile1(file);
+    } else if (fileIndex === 2) {
+      setTeamImage(URL.createObjectURL(file));
+      setFile2(file);
+    }
+  };
 
   // Function to update metadata
   const updateMetadata = (e) => {
@@ -130,8 +149,7 @@ function AboutUs() {
               ref={bannerRef}
               accept='image/*'
               onChange={(e) => {
-                setBanner(URL.createObjectURL(e.target.files[0]));
-                setFile1(e.target.files[0]);
+                handleFileUpload(e, 1);
               }}
             />
           </div>
@@ -178,8 +196,7 @@ function AboutUs() {
               accept='image/*'
               ref={teamImageRef}
               onChange={(e) => {
-                setTeamImage(URL.createObjectURL(e.target.files[0]));
-                setFile2(e.target.files[0]);
+                handleFileUpload(e, 2);
               }}
             />
           </div>
