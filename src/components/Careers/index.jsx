@@ -1,0 +1,389 @@
+import { useState, useEffect, useRef } from 'react';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Button } from 'primereact/button';
+import { Image } from 'primereact/image';
+import { Messages } from 'primereact/messages';
+import { messageTemplate } from '../../constants';
+import { getData, saveData } from '../../services/Careers';
+import { useForm } from 'react-hook-form';
+import { hasFileValidationErrors } from '../../utils/helpers';
+import { Accordion, AccordionTab } from 'primereact/accordion';
+import { Card } from 'primereact/card';
+import 'primeicons/primeicons.css';
+import './index.css';
+
+function Careers() {
+  const {
+    register,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
+      header: '',
+      title: '',
+      description: '',
+      about: '',
+      culture: '',
+    },
+  });
+
+  const bannerRef = useRef(null);
+  const cultureImageRef = useRef(null);
+  const message = useRef(null);
+  const [data, setData] = useState();
+  const [banner, setBanner] = useState();
+  const [cultureImage, setCultureImage] = useState();
+  const [file1, setFile1] = useState();
+  const [file2, setFile2] = useState();
+
+  const handleFileUpload = (e, fileIndex) => {
+    let file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    const fileValidationErrors = hasFileValidationErrors(file, "image");
+    if (!!fileValidationErrors) {
+      return message.current.show(messageTemplate('error', fileValidationErrors));
+    }
+    if (fileIndex === 1) {
+      setBanner(URL.createObjectURL(file));
+      setFile1(file);
+    } else if (fileIndex === 2) {
+      setCultureImage(URL.createObjectURL(file));
+      setFile2(file);
+    }
+  };
+
+  // Function to update metadata
+  const updateMetadata = (e) => {
+    setData({
+      ...data,
+      metadata: { ...data.metadata, [e.target.name]: e.target.value },
+    });
+  };
+
+  // Function to update page data
+  const updatePageData = async (e, index) => {
+    setData({
+      ...data,
+      pageData: {
+        ...data.pageData,
+        [index]: {
+          ...data.pageData[index],
+          value: e.target.value,
+        },
+      },
+    });
+  };
+
+  // Save click handler
+  const save = async (data) => {
+    // e.preventDefault();
+
+    // Add data in form object (for images)
+    const formData = new FormData();
+    formData.append('header', data.header);
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('about', data.about);
+    formData.append('culture', data.culture);
+    formData.append('file1', file1);
+    formData.append('file2', file2);
+    formData.append('faqs', JSON.stringify(faqs));
+
+    await saveData(formData);
+
+    message.current.show(messageTemplate('success', 'Data saved successfully'));
+  };
+
+  // Function to fetch data
+  const fetchData = async () => {
+    const data = await getData();
+    setData(data);
+    setBanner(data.images[0].picture);
+    setCultureImage(data.images[1].picture);
+
+    setValue('header', data.metadata.header);
+    setValue('title', data.metadata.title);
+    setValue('description', data.metadata.description);
+    setValue('about', data.pageData[0].value);
+    setValue('culture', data.pageData[1].value);
+    setFaqs(data.faqs || []);
+  };
+
+  // Get data
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const [isEditingFAQ, setIsEditingFAQ] = useState(false);
+  const [editingFaqId, setEditingFaqId] = useState(null);
+
+  const [faqs, setFaqs] = useState([
+    {
+      question: "Question",
+      answer: "Answer",
+    },
+    {
+      question: "Question",
+      answer: "Answer",
+    },
+    {
+      question: "Question",
+      answer: "Answer",
+    },
+  ]);
+  const rawFAQ = {
+    question: "",
+    answer: "",
+  };
+  const [faq, setFaq] = useState(rawFAQ);
+  const faqQuestionRef = useRef(null);
+  const resetFAQ = () => {
+    setIsEditingFAQ(false);
+    setFaq(rawFAQ);
+    setEditingFaqId(null);
+  };
+  const editFAQ = (index, data) => {
+    if (isEditingFAQ) {
+      return;
+    }
+    setEditingFaqId(index);
+    setIsEditingFAQ(true);
+    setFaq(data);
+    faqQuestionRef.current?.focus();
+  };
+  const deleteFAQ = (index) => {
+    if (isEditingFAQ) {
+      return;
+    }
+    setFaqs(old => old.filter((_, i) => i !== index));
+  };
+  const saveFAQ = () => {
+    if (!faq.question.trim() || !faq.answer.trim()) {
+      return;
+    }
+    if (isEditingFAQ) {
+      setFaqs(old => old.map((item, i) => {
+        if (i === editingFaqId) {
+          return { ...faq }
+        }
+        return item;
+      }));
+    }
+    else {
+      setFaqs(old => [...old, faq]);
+    }
+    resetFAQ();
+  };
+  if (!data) return;
+  return (
+    <>
+      {/* Header */}
+      <label className="page-header">Careers</label>
+
+      <Messages ref={message} />
+
+      {/* About */}
+      <label className="page-subheader">Banner</label>
+      <form onSubmit={handleSubmit(save)}>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="upload-image-wrapper animation">
+              <Image
+                src={banner}
+                className="img-banner"
+                onClick={() => bannerRef.current.click()}
+              />
+              <label htmlFor="banner-image" className="overlay animation">
+                <div className="text text-center">
+                  <h6 className="">
+                    Click to upload a new Photo!
+                  </h6>
+                  <div className="">
+                    <small>Recommended Size : 1280x960</small>
+                  </div>
+                </div>
+              </label>
+            </div>
+            <input
+              type="file"
+              id="banner-image"
+              ref={bannerRef}
+              accept='image/*'
+              onChange={(e) => {
+                handleFileUpload(e, 1);
+              }}
+            />
+          </div>
+          <div className="col-md-12 mt-2">
+            <label htmlFor="about" className="control-label">
+              Careers Paragraph <span className="required"> * </span>
+            </label>
+            <InputTextarea
+              name="about"
+              className="form-control"
+              rows={8}
+              {...register('about', {
+                required: 'About text is required',
+              })}
+            ></InputTextarea>
+            {errors.about && <div className='field-error'><span>{errors.about?.message}</span></div>}
+          </div>
+        </div>
+
+        {/* Culture */}
+        <label className="page-subheader mt-3 pt-2">Our culture  <span className="required"> * </span></label>
+        <div className="row">
+          <div className="col-md-3">
+            <div className="upload-image-wrapper">
+              <Image
+                src={cultureImage}
+                className="image-aboutus-team"
+                onClick={() => cultureImageRef.current.click()}
+              />
+              <label htmlFor="culture-image" className="overlay animation">
+                <div className="text text-center">
+                  <h6 className="">
+                    Click to upload a new Photo!
+                  </h6>
+                  <div className="">
+                    <small>Recommended Size : 300x400</small>
+                  </div>
+                </div>
+              </label>
+            </div>
+            <input
+              type="file"
+              id='culture-image'
+              accept='image/*'
+              ref={cultureImageRef}
+              onChange={(e) => {
+                handleFileUpload(e, 2);
+              }}
+            />
+          </div>
+          <div className="col-md-9 mt-2">
+            <InputTextarea
+              name="culture"
+              id='culture'
+              className="form-control"
+              rows={5}
+              {...register('culture', {
+                required: 'Culture text is required',
+              })}
+            ></InputTextarea>
+            {errors.culture && <div className='field-error'><span>{errors.culture?.message}</span></div>}
+          </div>
+        </div>
+
+        <section>
+          {/* FAQ */}
+          <label className="page-subheader mt-3 pt-2">Frequently Asked Questions</label>
+          {faqs.map((faq, index) =>
+            <div key={index} className="d-flex justify-content-center align-items-center gap-2">
+              <Accordion className={index === editingFaqId ? "active" : ""} style={{ flex: 1 }} activeIndex={editingFaqId}>
+                <AccordionTab header={faq.question}>
+                  <p className="m-0">{faq.answer}</p>
+                </AccordionTab>
+              </Accordion>
+              <div className='px-2 hover-scale' onClick={() => editFAQ(index, faq)}>
+                <i className="pi pi-file-edit" style={{ fontSize: "1.4em" }}></i>
+              </div>
+              <div className='px-2 hover-scale' onClick={() => deleteFAQ(index)}>
+                <i className="pi pi-trash" style={{ fontSize: "1.4em" }}></i>
+              </div>
+            </div>
+          )}
+          <Card title={isEditingFAQ ? "Edit FAQ" : "Add FAQ"} className='mt-2'>
+            <div className="row">
+              <div className="col-md-12">
+                <label htmlFor="title" className="control-label">
+                  Question <span className="required"> * </span>
+                </label>
+                <InputText
+                  ref={faqQuestionRef}
+                  name="title"
+                  id='title'
+                  className="form-control"
+                  value={faq.question}
+                  onChange={(e) => setFaq({ ...faq, question: e.target.value })}
+                ></InputText>
+                {errors.title && <div className='field-error'><span>{errors.title?.message}</span></div>}
+              </div>
+              <div className="col-md-12 mt-2 pt-2">
+                <label htmlFor="description">Answer <span className="required"> * </span></label>
+                <InputTextarea
+                  name="description"
+                  id='description'
+                  className="form-control"
+                  rows={5}
+                  value={faq.answer}
+                  onChange={(e) => setFaq({ ...faq, answer: e.target.value })}
+                ></InputTextarea>
+                {errors.description && <div className='field-error'><span>{errors.description?.message}</span></div>}
+              </div>
+              <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
+                {isEditingFAQ &&
+                  <Button label={"Discard FAQ Changes"} type='button' style={{ background: "#ddd", color: "#000" }} className='mx-2' onClick={resetFAQ} />
+                }
+                <Button label={isEditingFAQ ? "Save FAQ Changes" : "Add FAQ"} onClick={saveFAQ} type='button' />
+              </div>
+            </div>
+          </Card>
+
+        </section>
+
+        {/* Metadata */}
+        <label className="page-subheader mt-3 pt-2">Meatadata</label>
+        <div className="row">
+          <div className="col-md-6">
+            <label htmlFor="title" className="control-label">
+              Title <span className="required"> * </span>
+            </label>
+            <InputText
+              name="title"
+              id='title'
+              className="form-control"
+              {...register('title', {
+                required: 'Title is required',
+              })}
+            ></InputText>
+            {errors.title && <div className='field-error'><span>{errors.title?.message}</span></div>}
+          </div>
+          <div className="col-md-6">
+            <label htmlFor="header">Header <span className="required"> * </span></label>
+            <InputText
+              name="header"
+              id='header'
+              className="form-control"
+              {...register('header', {
+                required: 'Header is required',
+              })}
+            ></InputText>
+            {errors.header && <div className='field-error'><span>{errors.header?.message}</span></div>}
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="description">Description <span className="required"> * </span></label>
+            <InputTextarea
+              name="description"
+              id='description'
+              className="form-control"
+              rows={5}
+              {...register('description', {
+                required: 'Description is required',
+              })}
+            ></InputTextarea>
+            {errors.description && <div className='field-error'><span>{errors.description?.message}</span></div>}
+          </div>
+          <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
+            <Button label="Submit changes" type='submit' />
+          </div>
+        </div>
+      </form>
+    </>
+  );
+}
+
+export default Careers;

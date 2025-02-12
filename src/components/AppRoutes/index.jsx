@@ -17,6 +17,7 @@ import Partners from '../Partners';
 import Departments from '../Departments';
 import Locations from '../Locations';
 import Languages from '../Languages';
+import Careers from '../Careers';
 
 function AppRoutes() {
   return (
@@ -39,6 +40,7 @@ function AppRoutes() {
         <Route path="/departments" element={<Departments />}></Route>
         <Route path="/locations" element={<Locations />}></Route>
         <Route path="/languages" element={<Languages />}></Route>
+        <Route path="/careers" element={<Careers />}></Route>
       </Route>
     </Routes>
   );

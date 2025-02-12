@@ -1,0 +1,16 @@
+.hover-scale {
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.hover-scale:hover {
+    transform: scale(1.1);
+}
+
+.p-accordion-header-link {
+    color: #000;
+    text-decoration: none;
+}
+.active .p-accordion-header-link {
+    text-decoration: underline;
+}

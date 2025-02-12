@@ -99,6 +99,14 @@ function Sidebar() {
           Languages
         </Link>
       </li>
+      <li>
+        <Link
+          className={location.pathname == '/careers' ? 'active' : null}
+          to="/careers"
+        >
+          Careers
+        </Link>
+      </li>
     </ul>
   );
 }

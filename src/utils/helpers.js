@@ -7,7 +7,7 @@ export const hasFileValidationErrors = (file, type) => {
         if (!file.type.startsWith("image/")) {
             error = "Only image files are allowed!";
         }
-        else if (file.size > 1 * 1024 * 1024) {
+        else if (file.size > 2 * 1024 * 1024) {
             error = "The maximum file size is 2Mb";
         }
         return error === null ? false : error;
