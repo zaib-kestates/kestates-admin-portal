@@ -1,20 +1,23 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation, Meta } from 'react-router-dom';
-import { Dialog } from 'primereact/dialog';
-import DialogHeader from '../Layouts/DialogHeader';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
-import { Messages } from 'primereact/messages';
-import { getData } from '../../services/Blog';
-import { BlogColumns, messageTemplate } from '../../constants';
-import Metadata from './Metadata';
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation, Meta } from "react-router-dom";
+import { Dialog } from "primereact/dialog";
+import DialogHeader from "../Layouts/DialogHeader";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button } from "primereact/button";
+import { Paginator } from "primereact/paginator";
+import { Messages } from "primereact/messages";
+import { getData } from "../../services/Blog";
+import { BlogColumns, messageTemplate } from "../../constants";
+import Metadata from "./Metadata";
 
 function Blogs() {
   const navigate = useNavigate();
   const location = useLocation();
   const [blogs, setBlogs] = useState();
   const [pageNumber, setPageNumber] = useState(1);
+  const [totalRecords, setTotalRecords] = useState();
+  const [first, setFirst] = useState(0);
   const [showMetadata, setShowMetadata] = useState(false);
   const message = useRef(null);
 
@@ -34,15 +37,22 @@ function Blogs() {
 
     if (isSave) {
       message.current.show(
-        messageTemplate('success', 'Metadata saved successfully')
+        messageTemplate("success", "Metadata saved successfully")
       );
     }
   };
+
+  // Handle page change
+  const handlePageChange = (e) => {
+    setFirst(e.first);
+    setPageNumber(++e.page);
+  }
 
   // Function to get data
   const fetchData = async () => {
     const data = await getData(`blogs/listing/${pageNumber}`);
     setBlogs(data.rows);
+    setTotalRecords(data.totalRecords);
   };
 
   // Get data
@@ -52,10 +62,10 @@ function Blogs() {
     // Show message if state exists
     if (location.state) {
       message.current.show(
-        messageTemplate('success', 'Blog saved successfully')
+        messageTemplate("success", "Blog saved successfully")
       );
     }
-  }, []);
+  }, [pageNumber]);
 
   return (
     <>
@@ -69,11 +79,11 @@ function Blogs() {
           className="me-2"
           onClick={() => setShowMetadata(true)}
         />
-        <Button label="Add" onClick={() => navigate('/blogs/add')} />
+        <Button label="Add" onClick={() => navigate("/blogs/add")} />
       </div>
 
       {/* Table */}
-      <DataTable value={blogs} rows={10} stripedRows paginator>
+      <DataTable value={blogs} stripedRows>
         {BlogColumns.map((column, index) => (
           <Column
             key={column.field}
@@ -85,10 +95,18 @@ function Blogs() {
         <Column
           header=""
           className="text-center"
-          style={{ width: '9%' }}
+          style={{ width: "9%" }}
           body={actionTemplate}
         ></Column>
       </DataTable>
+
+      {/* Pagination */}
+      <Paginator
+        first={first}
+        rows={10}
+        totalRecords={totalRecords}
+        onPageChange={handlePageChange}
+      />
 
       {/* Metadata dialog */}
       <Dialog
