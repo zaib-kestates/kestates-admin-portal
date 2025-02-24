@@ -7,14 +7,14 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Image } from 'primereact/image';
 import { Button } from 'primereact/button';
 
-import { getData } from '../../services/Property';
+import { getData, updateData } from '../../services/Property';
 import Blog from '../../assets/blog.jpg';
 
 function EditProperty() {
   const navigate = useNavigate();
   const params = useParams();
   const [property, setProperty] = useState();
-
+  
   // Handle cancel click
   const handleCancel = (e) => {
     e.preventDefault();
@@ -26,8 +26,18 @@ function EditProperty() {
   const handleSave = (e) => {
     e.preventDefault();
 
-    console.log(property);
+    updateData(params.id, {
+      title: property.title,
+      qr_code_link: property.qr_code_link,
+    });
   };
+
+  const updateState = (e) => {
+    setProperty({
+      ...property,
+      [e.target.name]: e.target.value
+    });
+  } 
 
   const fetchData = async () => {
     const data = await getData(`properties/${params.id}`);
@@ -53,9 +63,10 @@ function EditProperty() {
               Title
             </label>
             <InputText
-              id="title"
+              name="title"
               className="form-control"
               value={property.title}
+              onChange={updateState}
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
@@ -63,9 +74,10 @@ function EditProperty() {
               Bed
             </label>
             <InputText
-              id="bed"
+              name="bed"
               className="form-control"
               value={property.bed}
+              onChange={updateState}
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
@@ -73,9 +85,10 @@ function EditProperty() {
               Bath
             </label>
             <InputText
-              id="bath"
+              name="bath"
               className="form-control"
               value={property.bath}
+              onChange={updateState}
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
@@ -83,9 +96,10 @@ function EditProperty() {
               Size
             </label>
             <InputText
-              id="size"
+              name="size"
               className="form-control"
               value={property.size}
+              onChange={updateState}
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
@@ -93,9 +107,10 @@ function EditProperty() {
               Permit Number
             </label>
             <InputText
-              id="permit_no"
+              name="permit_no"
               className="form-control"
               value={property.permit_no}
+              onChange={updateState}
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
@@ -103,9 +118,10 @@ function EditProperty() {
               Slug
             </label>
             <InputText
-              id="slug"
+              name="slug"
               className="form-control"
               value={property.slug}
+              onChange={updateState}
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
@@ -113,9 +129,10 @@ function EditProperty() {
               QR Code Link
             </label>
             <InputText
-              id="qr_code_link"
+              name="qr_code_link"
               className="form-control"
               value={property.qr_code_link}
+              onChange={updateState}
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
@@ -123,9 +140,10 @@ function EditProperty() {
               Price
             </label>
             <InputText
-              id="price"
+              name="price"
               className="form-control"
               value={property.price}
+              onChange={updateState}
             ></InputText>
           </div>
         </div>

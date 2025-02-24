@@ -5,3 +5,7 @@ export const getData = async (path) => {
 
     return data;
 }
+
+export const updateData = async (id, data) => {
+    await put(`properties/${id}`, data);
+}
