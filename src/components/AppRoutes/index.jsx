@@ -10,6 +10,7 @@ import AddBlog from '../Blogs/Add';
 import EditBlog from '../Blogs/Edit';
 import Properties from '../Properties';
 import AddProperty from '../Properties/Add';
+import EditProperty from '../Properties/Edit';
 import BlogCategories from '../BlogCategories';
 import Amenities from '../Amenities';
 import PropertyTypes from '../PropertyTypes';
@@ -32,6 +33,7 @@ function AppRoutes() {
         <Route path="/blogs/:id" element={<EditBlog />}></Route>
         <Route path="/properties" element={<Properties />}></Route>
         <Route path="/properties/add" element={<AddProperty />}></Route>
+        <Route path="/properties/:id" element={<EditProperty />}></Route>
         <Route path="/blog-categories" element={<BlogCategories />}></Route>
         <Route path="/amenities" element={<Amenities />}></Route>
         <Route path="/property-types" element={<PropertyTypes />}></Route>

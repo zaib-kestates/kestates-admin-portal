@@ -1,16 +1,16 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Dialog } from "primereact/dialog";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import { Messages } from "primereact/messages";
-import { Paginator } from "primereact/paginator";
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Messages } from 'primereact/messages';
+import { Paginator } from 'primereact/paginator';
 
-import DialogHeader from "../Layouts/DialogHeader";
-import Metadata from "./Metadata";
-import { messageTemplate } from "../../constants";
-import { getData } from "../../services/Property";
+import DialogHeader from '../Layouts/DialogHeader';
+import Metadata from './Metadata';
+import { messageTemplate } from '../../constants';
+import { getData } from '../../services/Property';
 
 function Properties() {
   const message = useRef(null);
@@ -21,6 +21,17 @@ function Properties() {
   const [first, setFirst] = useState(0);
   const [showMetadata, setShowMetadata] = useState(false);
 
+  const actionTemplate = (blog) => {
+    return (
+      <a
+        className="link-edit"
+        onClick={() => navigate(`/properties/${blog.id}`)}
+      >
+        Edit
+      </a>
+    );
+  };
+
   // Handle metadata cancel click
   const handleCancel = (e, isSave = false) => {
     e.preventDefault();
@@ -29,7 +40,7 @@ function Properties() {
 
     if (isSave) {
       message.current.show(
-        messageTemplate("success", "Metadata saved successfully")
+        messageTemplate('success', 'Metadata saved successfully')
       );
     }
   };
@@ -38,7 +49,7 @@ function Properties() {
   const handlePageChange = async (e) => {
     setFirst(e.first);
     setPageNumber(++e.page);
-  }
+  };
 
   const fetchData = async () => {
     const data = await getData(`properties/listing/${pageNumber}`);
@@ -62,15 +73,21 @@ function Properties() {
           className="me-2"
           onClick={() => setShowMetadata(true)}
         />
-        <Button label="Add" onClick={() => navigate("/properties/add")} />
+        <Button label="Add" onClick={() => navigate('/properties/add')} />
       </div>
 
       <DataTable value={properties} stripedRows>
-        <Column header="Title" field="title" style={{ width: "30%" }}></Column>
+        <Column header="Title" field="title" style={{ width: '30%' }}></Column>
         <Column header="Location" field="Location.name"></Column>
         <Column header="Type" field="PropertyType.name"></Column>
         <Column header="Price" field="price"></Column>
         <Column header="Slug" field="slug"></Column>
+        <Column
+          header=""
+          className="text-center"
+          style={{ width: '9%' }}
+          body={actionTemplate}
+        ></Column>
       </DataTable>
 
       {/* Pagination */}
