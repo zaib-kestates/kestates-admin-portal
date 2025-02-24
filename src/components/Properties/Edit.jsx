@@ -14,6 +14,8 @@ function EditProperty() {
   const navigate = useNavigate();
   const params = useParams();
   const [property, setProperty] = useState();
+
+  const publishStatus = ['publish', 'draft'];
   
   // Handle cancel click
   const handleCancel = (e) => {
@@ -29,6 +31,7 @@ function EditProperty() {
     updateData(params.id, {
       title: property.title,
       qr_code_link: property.qr_code_link,
+      publish_status: property.publish_status
     });
   };
 
@@ -146,6 +149,21 @@ function EditProperty() {
               onChange={updateState}
             ></InputText>
           </div>
+          <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="department" className="control-label">
+              Publish Status
+            </label>
+            <Dropdown
+              name="publish_status"
+              options={publishStatus}
+              //optionLabel="name"
+              //optionValue="id"
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              value={property.publish_status}
+              onChange={updateState}
+            ></Dropdown>
+            </div>
         </div>
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
