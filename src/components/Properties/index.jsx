@@ -81,6 +81,7 @@ function Properties() {
         <Column header="Location" field="Location.name"></Column>
         <Column header="Type" field="PropertyType.name"></Column>
         <Column header="Price" field="price"></Column>
+        <Column header="Status" field="status"></Column>
         <Column header="Slug" field="slug"></Column>
         <Column
           header=""
