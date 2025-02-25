@@ -172,7 +172,7 @@ video {
   object-fit: fill;
 }
 
-.alert {
+div.alert {
   padding: 10px 15px;
 }
 
