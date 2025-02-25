@@ -1,18 +1,18 @@
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { Image } from 'primereact/image';
-import { Button } from 'primereact/button';
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
 
-import { getData, updateData } from '../../services/Property';
-import { publishStatus, propertyStatus } from '../../constants/properties';
-import useFetchPropertyTypes from '../../hooks/useFetchPropertyTypes';
-import useFetchLocations from '../../hooks/useFetchLocations';
-import useFetchTeams from '../../hooks/useFetchTeams';
-import { populateFormData } from '../../helpers';
-import Blog from '../../assets/blog.jpg';
+import { getData, updateData } from "../../services/Property";
+import { publishStatus, propertyStatus } from "../../constants/properties";
+import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
+import useFetchLocations from "../../hooks/useFetchLocations";
+import useFetchTeams from "../../hooks/useFetchTeams";
+import { populateFormData } from "../../helpers";
+import Blog from "../../assets/blog.jpg";
 
 function EditProperty() {
   const navigate = useNavigate();
@@ -38,17 +38,27 @@ function EditProperty() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate('/properties');
+    navigate("/properties");
   };
 
   // Handle save click
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
 
     // Add data in form object (for image)
     const formData = populateFormData(property);
+    formData.append("file", file);
 
-    updateData(params.id, formData);
+    // Save data
+    try {
+      await updateData(params.id, formData);
+
+      navigate("/properties", {
+        state: { showMessage: true },
+      });
+    } catch (error) {
+      console.log(error.response.data.messages);
+    } 
   };
 
   const updateState = (e) => {

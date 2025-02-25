@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Dialog } from 'primereact/dialog';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -15,6 +15,7 @@ import { getData } from '../../services/Property';
 function Properties() {
   const message = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const [properties, setProperties] = useState();
   const [pageNumber, setPageNumber] = useState(1);
   const [totalRecords, setTotalRecords] = useState();
@@ -59,6 +60,13 @@ function Properties() {
 
   useEffect(() => {
     fetchData();
+
+    if (location.state) {
+      message.current.show(
+        messageTemplate("success", "Property updated successfully")
+      );
+    }
+
   }, [pageNumber]);
 
   return (

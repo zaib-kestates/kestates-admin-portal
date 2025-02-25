@@ -171,3 +171,11 @@ input[type='file'] {
 video {
   object-fit: fill;
 }
+
+.alert {
+  padding: 10px 15px;
+}
+
+.alert-danger span {
+  display: block;
+}

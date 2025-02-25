@@ -1,21 +1,24 @@
-import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { MultiSelect } from 'primereact/multiselect';
-import { Image } from 'primereact/image';
-import { Button } from 'primereact/button';
-import { getData, updateData } from '../../services/Team';
-import useFetchDepartments from '../../hooks/useFetchDepartments';
-import useFetchLanguages from '../../hooks/useFetchLanguages';
-import { populateFormData } from '../../helpers';
+import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
+import { MultiSelect } from "primereact/multiselect";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
+
+import { getData, updateData } from "../../services/Team";
+import useFetchDepartments from "../../hooks/useFetchDepartments";
+import useFetchLanguages from "../../hooks/useFetchLanguages";
+import { populateFormData } from "../../helpers";
+import Errors from "../Layouts/Errors";
 
 function EditTeam() {
   const navigate = useNavigate();
   const imageRef = useRef(null);
   const [team, setTeam] = useState();
   const [file, setFile] = useState();
+  const [errors, setErrors] = useState();
   const departments = useFetchDepartments();
   const languages = useFetchLanguages();
   const { id } = useParams();
@@ -30,7 +33,7 @@ function EditTeam() {
   const handleClick = (e) => {
     e.preventDefault();
 
-    navigate('/teams');
+    navigate("/teams");
   };
 
   // Function to update state
@@ -44,19 +47,25 @@ function EditTeam() {
 
     // Add data in formData (for image)
     const formData = populateFormData(team);
-    formData.delete('LanguageIds');
+    formData.delete("LanguageIds");
 
     // Add LanguageIds in formdata
     team.LanguageIds.forEach((languageId) =>
-      formData.append('LanguageIds[]', languageId)
+      formData.append("LanguageIds[]", languageId)
     );
 
-    await updateData(id, formData);
-    navigate('/teams', {
-      state: {
-        showMessage: true,
-      },
-    });
+    // Update data
+    try {
+      await updateData(id, formData);
+      navigate("/teams", {
+        state: {
+          showMessage: true,
+        },
+      });
+    } catch (error) {
+      setErrors(error.response.data.messages);
+      window.scrollTo(0,0);
+    }
   };
 
   // Function to get data
@@ -74,8 +83,13 @@ function EditTeam() {
   if (!team) return;
   return (
     <>
+     {/* Header */}
       <label className="page-header">Edit Team</label>
 
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
+
+      {/* Form */}
       <form>
         <div className="row">
           <div className="col-md-6 text-center">

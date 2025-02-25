@@ -1,23 +1,25 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { MultiSelect } from 'primereact/multiselect';
-import { Image } from 'primereact/image';
-import { Button } from 'primereact/button';
-import useFetchDepartments from '../../hooks/useFetchDepartments';
-import useFetchLanguages from '../../hooks/useFetchLanguages';
-import ProfilePicture from '../../assets/user-prof.png';
-import { saveData } from '../../services/Team';
-import { teamObject } from '../../constants';
-import { populateFormData } from '../../helpers';
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
+import { MultiSelect } from "primereact/multiselect";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
+import useFetchDepartments from "../../hooks/useFetchDepartments";
+import useFetchLanguages from "../../hooks/useFetchLanguages";
+import ProfilePicture from "../../assets/user-prof.png";
+import { saveData } from "../../services/Team";
+import { teamObject } from "../../constants";
+import { populateFormData } from "../../helpers";
+import Errors from "../Layouts/Errors";
 
 function AddTeam() {
   const navigate = useNavigate();
   const imageRef = useRef(null);
   const [team, setTeam] = useState(teamObject);
   const [file, setFile] = useState(ProfilePicture);
+  const [errors, setErrors] = useState();
   const departments = useFetchDepartments();
   const languages = useFetchLanguages();
 
@@ -32,7 +34,7 @@ function AddTeam() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate('/teams');
+    navigate("/teams");
   };
 
   // Function to update state
@@ -46,25 +48,36 @@ function AddTeam() {
 
     // Add data to form object (for image)
     const formData = populateFormData(team);
-    formData.delete('LanguageIds');
+    formData.delete("LanguageIds");
 
     // Append LanguageIds as array
     team.LanguageIds.forEach((languageId) => {
-      formData.append('LanguageIds[]', languageId);
+      formData.append("LanguageIds[]", languageId);
     });
 
-    await saveData(formData);
-    navigate('/teams', {
-      state: {
-        showMessage: true,
-      },
-    });
+    // Save data
+    try {
+      await saveData(formData);
+      navigate("/teams", {
+        state: {
+          showMessage: true,
+        },
+      });
+    } catch (error) {
+      setErrors(error.response.data.messages);
+      window.scrollTo(0,0);
+    }
   };
 
   return (
     <>
+      {/* Header */}
       <label className="page-header">Add Team</label>
 
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
+
+      {/* Form */}
       <form>
         <div className="row">
           <div className="col-md-6 text-center">

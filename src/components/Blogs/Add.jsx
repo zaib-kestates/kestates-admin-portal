@@ -1,16 +1,18 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { Image } from 'primereact/image';
-import { Button } from 'primereact/button';
-import { Editor } from 'primereact/editor';
-import useFetchCategories from '../../hooks/useFetchCategories';
-import { blogTemplate } from '../../constants';
-import { saveData } from '../../services/Blog';
-import Blog from '../../assets/blog.jpg';
-import { populateFormData } from '../../helpers';
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
+import { Editor } from "primereact/editor";
+
+import useFetchCategories from "../../hooks/useFetchCategories";
+import { blogTemplate } from "../../constants";
+import { saveData } from "../../services/Blog";
+import Blog from "../../assets/blog.jpg";
+import { populateFormData } from "../../helpers";
+import Errors from "../Layouts/Errors";
 
 function AddBlog() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ function AddBlog() {
   const categories = useFetchCategories();
   const [blog, setBlog] = useState(blogTemplate);
   const [file, setFile] = useState(Blog);
+  const [errors, setErrors] = useState();
 
   // Handle file change
   const handleFileChange = (e) => {
@@ -29,7 +32,7 @@ function AddBlog() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate('/blogs');
+    navigate("/blogs");
   };
 
   // Function to update state
@@ -44,18 +47,29 @@ function AddBlog() {
     // Add data in formdata object (for image)
     const formData = populateFormData(blog);
 
-    await saveData(formData);
-    navigate('/blogs', {
-      state: {
-        showMessage: true,
-      },
-    });
+    // Save data
+    try {
+      await saveData(formData);
+      navigate("/blogs", {
+        state: {
+          showMessage: true,
+        },
+      });
+    } catch (error) {
+      setErrors(error.response.data.messages);
+      window.scrollTo(0,0);
+    }
   };
 
   return (
     <>
+      {/* Header */}
       <label className="page-header">Add Blog</label>
 
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
+
+      {/* Form */}
       <form>
         <div className="row">
           <div className="col-md-12">
@@ -82,7 +96,7 @@ function AddBlog() {
                   value={blog.title}
                   onChange={updateState}
                 ></InputText>
-              </div>{' '}
+              </div>{" "}
               <div className="col-md-12 mt-2 pt-2">
                 <label htmlFor="category" className="control-label">
                   Category
@@ -130,7 +144,7 @@ function AddBlog() {
           </label>
           <Editor
             name="description"
-            style={{ height: '200px' }}
+            style={{ height: "200px" }}
             value={blog.description}
             onTextChange={(e) => setBlog({ ...blog, description: e.htmlValue })}
           />
