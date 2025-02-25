@@ -1,22 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
-import { MultiSelect } from 'primereact/multiselect';
 import { Image } from 'primereact/image';
 import { Button } from 'primereact/button';
 
 import { getData, updateData } from '../../services/Property';
+import { publishStatus, propertyStatus } from '../../constants/properties';
+import useFetchPropertyTypes from '../../hooks/useFetchPropertyTypes';
+import useFetchLocations from '../../hooks/useFetchLocations';
+import useFetchTeams from '../../hooks/useFetchTeams';
+import { populateFormData } from '../../helpers';
 import Blog from '../../assets/blog.jpg';
 
 function EditProperty() {
   const navigate = useNavigate();
   const params = useParams();
+  const imageRef = useRef();
   const [property, setProperty] = useState();
+  const [file, setFile] = useState();
+  const propertyTypes = useFetchPropertyTypes();
+  const locations = useFetchLocations();
+  const teams = useFetchTeams();
 
-  const publishStatus = ['publish', 'draft'];
-  
+  // Handle file change
+  const handleFileChange = (e) => {
+    setFile(URL.createObjectURL(e.target.files[0]));
+
+    setProperty({
+      ...property,
+      file: e.target.files[0],
+    });
+  };
+
   // Handle cancel click
   const handleCancel = (e) => {
     e.preventDefault();
@@ -28,23 +45,23 @@ function EditProperty() {
   const handleSave = (e) => {
     e.preventDefault();
 
-    updateData(params.id, {
-      title: property.title,
-      qr_code_link: property.qr_code_link,
-      publish_status: property.publish_status
-    });
+    // Add data in form object (for image)
+    const formData = populateFormData(property);
+
+    updateData(params.id, formData);
   };
 
   const updateState = (e) => {
     setProperty({
       ...property,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-  } 
+  };
 
   const fetchData = async () => {
     const data = await getData(`properties/${params.id}`);
     setProperty(data);
+    setFile(data.picture);
   };
 
   useEffect(() => {
@@ -59,7 +76,12 @@ function EditProperty() {
       <form>
         <div className="row">
           <div className="col-md-12">
-            <Image src={Blog} className="img-banner" />
+            <Image
+              src={file}
+              className="img-banner"
+              onClick={() => imageRef.current.click()}
+            />
+            <input type="file" ref={imageRef} onChange={handleFileChange} />
           </div>
           <div className="col-md-6 mt-2 pt-2">
             <label htmlFor="title" className="control-label">
@@ -117,6 +139,17 @@ function EditProperty() {
             ></InputText>
           </div>
           <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="permit_no" className="control-label">
+              Reference Number
+            </label>
+            <InputText
+              name="reference_number"
+              className="form-control"
+              value={property.reference_number}
+              onChange={updateState}
+            ></InputText>
+          </div>
+          <div className="col-md-6 mt-2 pt-2">
             <label htmlFor="slug" className="control-label">
               Slug
             </label>
@@ -151,19 +184,87 @@ function EditProperty() {
           </div>
           <div className="col-md-6 mt-2 pt-2">
             <label htmlFor="department" className="control-label">
+              Status
+            </label>
+            <Dropdown
+              name="status"
+              options={propertyStatus}
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              value={property.status}
+              onChange={updateState}
+            ></Dropdown>
+          </div>
+          <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="department" className="control-label">
               Publish Status
             </label>
             <Dropdown
               name="publish_status"
               options={publishStatus}
-              //optionLabel="name"
-              //optionValue="id"
               className="w-full md:w-14rem"
               placeholder="Select"
               value={property.publish_status}
               onChange={updateState}
             ></Dropdown>
-            </div>
+          </div>
+          <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="department" className="control-label">
+              Property Type
+            </label>
+            <Dropdown
+              name="PropertyTypeId"
+              options={propertyTypes}
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              optionLabel="name"
+              optionValue="id"
+              value={property.PropertyTypeId}
+              onChange={updateState}
+            ></Dropdown>
+          </div>
+          <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="department" className="control-label">
+              Location
+            </label>
+            <Dropdown
+              name="LocationId"
+              options={locations}
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              optionLabel="name"
+              optionValue="id"
+              value={property.LocationId}
+              onChange={updateState}
+            ></Dropdown>
+          </div>
+          <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="department" className="control-label">
+              Team
+            </label>
+            <Dropdown
+              name="TeamId"
+              options={teams}
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              optionLabel="name"
+              optionValue="id"
+              value={property.TeamId}
+              onChange={updateState}
+            ></Dropdown>
+          </div>
+          <div className="col-md-12 pt-2 mt-2">
+            <label htmlFor="caption" className="control-label">
+              Description
+            </label>
+            <InputTextarea
+              name="description"
+              className="form-control"
+              rows="8"
+              value={property.description}
+              onChange={updateState}
+            ></InputTextarea>
+          </div>
         </div>
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
