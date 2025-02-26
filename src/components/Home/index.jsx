@@ -3,31 +3,19 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
 import { Messages } from 'primereact/messages';
-import { useForm } from 'react-hook-form';
+
 import { getData, saveData } from '../../services/Home';
-import { messageTemplate, homeObject } from '../../constants';
+import { messageTemplate } from '../../constants';
+import Errors from '../Layouts/Errors';
 import './index.css';
 
 function Home() {
-  const {
-    register,
-    setValue,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
-    defaultValues: {
-      our_story: '',
-      title: '',
-      header: '',
-      description: '',
-    },
-  });
-
   const videoRef = useRef(null);
   const videoPlayerRef = useRef(null);
   const message = useRef(null);
   const [data, setData] = useState();
   const [bannerVideo, setBannerVideo] = useState();
+  const [errors, setErrors] = useState();
 
   // Function to update metadata
   const updateMetadata = (e) => {
@@ -68,20 +56,27 @@ function Home() {
   };
 
   // Function to save data
-  const save = async (data) => {
-    console.log(data);
+  const save = async (e) => {
+    e.preventDefault();
 
     // Add data in form object (for video)
     const formData = new FormData();
-    formData.append('header', data.header);
-    formData.append('title', data.title);
-    formData.append('description', data.description);
-    formData.append('our_story', data.our_story);
+    formData.append('header', data.metadata.header);
+    formData.append('title', data.metadata.title);
+    formData.append('description', data.metadata.description);
+    formData.append('our_story', data.pageData[0].value);
     formData.append('file', data.file);
+    window.scrollTo(0, 0);
 
-    await saveData(formData);
-
-    message.current.show(messageTemplate('success', 'Data saved successfully'));
+    try {
+      await saveData(formData);
+      setErrors(null);
+      message.current.show(
+        messageTemplate('success', 'Data saved successfully')
+      );
+    } catch (error) {
+      setErrors(error.response.data.messages);
+    }
   };
 
   // Function to retrieve data
@@ -89,10 +84,6 @@ function Home() {
     const data = await getData();
     setData(data);
     setBannerVideo(data.images[0].picture);
-    setValue('our_story', data.pageData[0].value);
-    setValue('title', data.metadata.title);
-    setValue('header', data.metadata.header);
-    setValue('description', data.metadata.description);
   };
 
   // Get data
@@ -106,10 +97,13 @@ function Home() {
       {/* Header */}
       <label className="page-header">Home</label>
 
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
+
       <Messages ref={message} />
 
       {/* Banner video */}
-      <form onSubmit={handleSubmit(save)}>
+      <form>
         <div className="row">
           <div className="col-md-12">
             <video
@@ -140,9 +134,9 @@ function Home() {
               id="our_story"
               className="form-control"
               rows={8}
-              {...register('our_story', { required: 'Our story is required' })}
+              onChange={updatePageData}
+              value={data.pageData[0].value}
             ></InputTextarea>
-            {errors.our_story && <span>{errors.our_story?.message}</span>}
           </div>
         </div>
 
@@ -156,18 +150,18 @@ function Home() {
             <InputText
               name="title"
               className="form-control"
-              {...register('title', { required: 'Title is required' })}
+              value={data.metadata.title}
+              onChange={updateMetadata}
             ></InputText>
-            {errors.title && <span>{errors.title?.message}</span>}
           </div>
           <div className="col-md-6">
             <label htmlFor="header">Header</label>
             <InputText
               name="header"
               className="form-control"
-              {...register('header', { required: 'Header is required' })}
+              value={data.metadata.header}
+              onChange={updateMetadata}
             ></InputText>
-            {errors.header && <span>{errors.header?.message}</span>}
           </div>
           <div className="col-md-12 mt-2 pt-2">
             <label htmlFor="description">Description</label>
@@ -175,14 +169,12 @@ function Home() {
               name="description"
               className="form-control"
               rows={5}
-              {...register('description', {
-                required: 'Description is required',
-              })}
+              value={data.metadata.description}
+              onChange={updateMetadata}
             ></InputTextarea>
-            {errors.description && <span>{errors.description?.message}</span>}
           </div>
           <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
-            <Button label="Save" />
+            <Button label="Save" onClick={save} />
           </div>
         </div>
       </form>
