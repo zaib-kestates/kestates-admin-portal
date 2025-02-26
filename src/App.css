@@ -178,4 +178,5 @@ div.alert {
 
 .alert-danger span {
   display: block;
+  font-size: 15px;
 }

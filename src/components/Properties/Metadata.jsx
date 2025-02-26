@@ -3,10 +3,13 @@ import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
 import PropTypes from 'prop-types';
+
 import { getData, saveData } from '../../services/Metadata';
+import Errors from '../Layouts/Errors';
 
 function Metadata({ handleCancel }) {
   const [metadata, setMetadata] = useState();
+  const [errors, setErrors] = useState();
 
   // Function to update state
   const updateState = (e) => {
@@ -20,8 +23,12 @@ function Metadata({ handleCancel }) {
   const save = async (e) => {
     e.preventDefault();
 
-    await saveData(metadata, 'properties');
-    handleCancel(e, true);
+    try {
+      await saveData(metadata, 'properties');
+      handleCancel(e, true);
+    } catch (error) {
+      setErrors(error.response.data.messages);
+    }
   };
 
   // Function to get metadata
@@ -36,55 +43,61 @@ function Metadata({ handleCancel }) {
 
   if (!metadata) return;
   return (
-    <form>
-      <div className="row">
-        <div className="col-md-12">
-          <label htmlFor="title" className="control-label">
-            Title
-          </label>
-          <InputText
-            name="title"
-            className="form-control"
-            value={metadata.title}
-            onChange={updateState}
-          ></InputText>
-        </div>
-        <div className="col-md-12 mt-2 pt-2">
-          <label htmlFor="header" className="control-label">
-            Header
-          </label>
-          <InputText
-            name="header"
-            className="form-control"
-            value={metadata.header}
-            onChange={updateState}
-          ></InputText>
-        </div>
-        <div className="col-md-12 mt-2 pt-2">
-          <label htmlFor="description" className="control-label">
-            Description
-          </label>
-          <InputTextarea
-            name="description"
-            className="form-control"
-            rows={5}
-            value={metadata.description}
-            onChange={updateState}
-          ></InputTextarea>
-        </div>
+    <>
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
 
-        <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
-          <Button label="Save" onClick={save} />
-          <Button
-            type="button"
-            className="ms-2"
-            label="Cancel"
-            severity="secondary"
-            onClick={handleCancel}
-          />
+      {/* Form */}
+      <form>
+        <div className="row">
+          <div className="col-md-12">
+            <label htmlFor="title" className="control-label">
+              Title
+            </label>
+            <InputText
+              name="title"
+              className="form-control"
+              value={metadata.title}
+              onChange={updateState}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="header" className="control-label">
+              Header
+            </label>
+            <InputText
+              name="header"
+              className="form-control"
+              value={metadata.header}
+              onChange={updateState}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="description" className="control-label">
+              Description
+            </label>
+            <InputTextarea
+              name="description"
+              className="form-control"
+              rows={5}
+              value={metadata.description}
+              onChange={updateState}
+            ></InputTextarea>
+          </div>
+
+          <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
+            <Button label="Save" onClick={save} />
+            <Button
+              type="button"
+              className="ms-2"
+              label="Cancel"
+              severity="secondary"
+              onClick={handleCancel}
+            />
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 

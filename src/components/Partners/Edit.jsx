@@ -3,13 +3,16 @@ import { InputText } from 'primereact/inputtext';
 import { Image } from 'primereact/image';
 import { Button } from 'primereact/button';
 import PropTypes from 'prop-types';
+
 import { getData, updateData } from '../../services/Partner';
 import { populateFormData } from '../../helpers';
+import Errors from '../Layouts/Errors';
 
 function EditPartner({ handleCancel, partnerId }) {
   const imageRef = useRef(null);
   const [partner, setPartner] = useState();
   const [file, setFile] = useState();
+  const [errors, setErrors] = useState();
 
   // HandleFileChange
   const handleFileChange = (e) => {
@@ -23,9 +26,13 @@ function EditPartner({ handleCancel, partnerId }) {
 
     // Add data in form object (for image)
     const formData = populateFormData(partner);
-    await updateData(partnerId, formData);
 
-    handleCancel(true, 'edit');
+    try {
+      await updateData(partnerId, formData);
+      handleCancel(true, 'edit');
+    } catch (error) {
+      setErrors(error.response.data.messages);
+    }
   };
 
   // Function to update state
@@ -46,51 +53,57 @@ function EditPartner({ handleCancel, partnerId }) {
 
   if (!partner) return;
   return (
-    <form>
-      <div className="row">
-        <div className="col-md-12 text-center">
-          <Image
-            className="image-team"
-            src={file}
-            onClick={() => imageRef.current.click()}
-          ></Image>
-          <input type="file" ref={imageRef} onChange={handleFileChange} />
-        </div>
-        <div className="col-md-12 mt-2 pt-2">
-          <label htmlFor="name" className="control-label">
-            Name
-          </label>
-          <InputText
-            name="name"
-            className="form-control"
-            value={partner.name}
-            onChange={updateState}
-          ></InputText>
-        </div>
-        <div className="col-md-12 mt-2 pt-2">
-          <label htmlFor="url" className="control-label">
-            Url
-          </label>
-          <InputText
-            name="url"
-            className="form-control"
-            value={partner.url}
-            onChange={updateState}
-          ></InputText>
-        </div>
+    <>
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
 
-        <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
-          <Button label="Save" onClick={save} />
-          <Button
-            type="button"
-            className="ms-2"
-            label="Cancel"
-            severity="secondary"
-            onClick={() => handleCancel(false, 'edit')}
-          />
+      {/* Form */}
+      <form>
+        <div className="row">
+          <div className="col-md-12 text-center">
+            <Image
+              className="image-team"
+              src={file}
+              onClick={() => imageRef.current.click()}
+            ></Image>
+            <input type="file" ref={imageRef} onChange={handleFileChange} />
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="name" className="control-label">
+              Name
+            </label>
+            <InputText
+              name="name"
+              className="form-control"
+              value={partner.name}
+              onChange={updateState}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="url" className="control-label">
+              Url
+            </label>
+            <InputText
+              name="url"
+              className="form-control"
+              value={partner.url}
+              onChange={updateState}
+            ></InputText>
+          </div>
+
+          <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
+            <Button label="Save" onClick={save} />
+            <Button
+              type="button"
+              className="ms-2"
+              label="Cancel"
+              severity="secondary"
+              onClick={() => handleCancel(false, 'edit')}
+            />
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 

@@ -3,15 +3,18 @@ import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Image } from 'primereact/image';
 import PropTypes from 'prop-types';
+
 import { saveData } from '../../services/Partner';
 import Logo from '../../assets/user-prof.png';
 import { partnerTemplate } from '../../constants';
 import { populateFormData } from '../../helpers';
+import Errors from '../Layouts/Errors';
 
 function AddPartner({ handleCancel }) {
   const imageRef = useRef(null);
   const [partner, setPartner] = useState(partnerTemplate);
   const [file, setFile] = useState(Logo);
+  const [errors, setErrors] = useState();
 
   // Handle file change
   const handleFileChange = (e) => {
@@ -25,9 +28,13 @@ function AddPartner({ handleCancel }) {
 
     // Add data in form object (for image)
     const formData = populateFormData(partner);
-    await saveData(formData);
 
-    handleCancel(true);
+    try {
+      await saveData(formData);
+      handleCancel(true);
+    } catch (error) {
+      setErrors(error.response.data.messages);
+    }
   };
 
   // Function to update state
@@ -36,51 +43,57 @@ function AddPartner({ handleCancel }) {
   };
 
   return (
-    <form>
-      <div className="row">
-        <div className="col-md-12 text-center">
-          <Image
-            className="image-team"
-            src={file}
-            onClick={() => imageRef.current.click()}
-          ></Image>
-          <input type="file" ref={imageRef} onChange={handleFileChange} />
-        </div>
-        <div className="col-md-12 mt-2 pt-2">
-          <label htmlFor="name" className="control-label">
-            Name
-          </label>
-          <InputText
-            name="name"
-            className="form-control"
-            value={partner.name}
-            onChange={updateState}
-          ></InputText>
-        </div>
-        <div className="col-md-12 mt-2 pt-2">
-          <label htmlFor="url" className="control-label">
-            Url
-          </label>
-          <InputText
-            name="url"
-            className="form-control"
-            value={partner.url}
-            onChange={updateState}
-          ></InputText>
-        </div>
+    <>
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
 
-        <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
-          <Button label="Save" onClick={save} />
-          <Button
-            type="button"
-            className="ms-2"
-            label="Cancel"
-            severity="secondary"
-            onClick={() => handleCancel()}
-          />
+      {/* Form */}
+      <form>
+        <div className="row">
+          <div className="col-md-12 text-center">
+            <Image
+              className="image-team"
+              src={file}
+              onClick={() => imageRef.current.click()}
+            ></Image>
+            <input type="file" ref={imageRef} onChange={handleFileChange} />
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="name" className="control-label">
+              Name
+            </label>
+            <InputText
+              name="name"
+              className="form-control"
+              value={partner.name}
+              onChange={updateState}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="url" className="control-label">
+              Url
+            </label>
+            <InputText
+              name="url"
+              className="form-control"
+              value={partner.url}
+              onChange={updateState}
+            ></InputText>
+          </div>
+
+          <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
+            <Button label="Save" onClick={save} />
+            <Button
+              type="button"
+              className="ms-2"
+              label="Cancel"
+              severity="secondary"
+              onClick={() => handleCancel()}
+            />
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 
