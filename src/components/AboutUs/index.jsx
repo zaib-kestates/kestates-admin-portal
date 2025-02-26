@@ -1,12 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Button } from 'primereact/button';
-import { Image } from 'primereact/image';
-import { Messages } from 'primereact/messages';
-import { messageTemplate } from '../../constants';
-import { getData, saveData } from '../../services/AboutUs';
-import './index.css';
+import { useState, useEffect, useRef } from "react";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
+import { Image } from "primereact/image";
+import { Messages } from "primereact/messages";
+
+import { messageTemplate } from "../../constants";
+import { getData, saveData } from "../../services/AboutUs";
+import Errors from "../Layouts/Errors";
+import "./index.css";
 
 function AboutUs() {
   const bannerRef = useRef(null);
@@ -17,6 +19,7 @@ function AboutUs() {
   const [teamImage, setTeamImage] = useState();
   const [file1, setFile1] = useState();
   const [file2, setFile2] = useState();
+  const [errors, setErrors] = useState();
 
   // Function to update metadata
   const updateMetadata = (e) => {
@@ -46,17 +49,27 @@ function AboutUs() {
 
     // Add data in form object (for images)
     const formData = new FormData();
-    formData.append('header', data.metadata.header);
-    formData.append('title', data.metadata.title);
-    formData.append('description', data.metadata.description);
-    formData.append('about', data.pageData[0].value);
-    formData.append('team', data.pageData[1].value);
-    formData.append('file1', file1);
-    formData.append('file2', file2);
+    formData.append("header", data.metadata.header);
+    formData.append("title", data.metadata.title);
+    formData.append("description", data.metadata.description);
+    formData.append("about", data.pageData[0].value);
+    formData.append("team", data.pageData[1].value);
+    formData.append("file1", file1);
+    formData.append("file2", file2);
+    window.scrollTo(0,0);
 
-    await saveData(formData);
+    console.log(formData);
 
-    message.current.show(messageTemplate('success', 'Data saved successfully'));
+    try {
+      await saveData(formData);
+      setErrors(null);
+      
+      message.current.show(
+        messageTemplate("success", "Data saved successfully")
+      );
+    } catch (error) {
+      setErrors(error.response.data.messages);
+    }
   };
 
   // Function to fetch data
@@ -77,6 +90,9 @@ function AboutUs() {
     <>
       {/* Header */}
       <label className="page-header">About Us</label>
+
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
 
       <Messages ref={message} />
 
