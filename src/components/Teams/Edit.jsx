@@ -11,6 +11,7 @@ import { getData, updateData } from "../../services/Team";
 import useFetchDepartments from "../../hooks/useFetchDepartments";
 import useFetchLanguages from "../../hooks/useFetchLanguages";
 import { populateFormData } from "../../helpers";
+import { STATUS } from "../../constants/common";
 import Errors from "../Layouts/Errors";
 
 function EditTeam() {
@@ -64,7 +65,7 @@ function EditTeam() {
       });
     } catch (error) {
       setErrors(error.response.data.messages);
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -83,7 +84,7 @@ function EditTeam() {
   if (!team) return;
   return (
     <>
-     {/* Header */}
+      {/* Header */}
       <label className="page-header">Edit Team</label>
 
       {/* Errors */}
@@ -135,7 +136,6 @@ function EditTeam() {
               </div>
             </div>
           </div>
-
           <div className="col-md-6 mt-2 pt-2">
             <label htmlFor="email" className="control-label">
               Email
@@ -205,7 +205,7 @@ function EditTeam() {
               onChange={updateState}
             ></InputTextarea>
           </div>
-          <div className="col-md-6 mt-2 pt-2">
+          <div className="col-md-3 mt-2 pt-2">
             <label htmlFor="slug" className="control-label">
               Slug
             </label>
@@ -216,6 +216,20 @@ function EditTeam() {
               value={team.slug}
               onChange={updateState}
             ></InputText>
+          </div>
+          <div className="col-md-3 mt-2 pt-2">
+            <label htmlFor="status" className="control-label">
+              Status
+            </label>
+            <Dropdown
+              id="status"
+              name="status"
+              options={STATUS}
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              value={team.status}
+              onChange={updateState}
+            ></Dropdown>
           </div>
         </div>
 

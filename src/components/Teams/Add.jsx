@@ -6,11 +6,13 @@ import { Dropdown } from "primereact/dropdown";
 import { MultiSelect } from "primereact/multiselect";
 import { Image } from "primereact/image";
 import { Button } from "primereact/button";
+
 import useFetchDepartments from "../../hooks/useFetchDepartments";
 import useFetchLanguages from "../../hooks/useFetchLanguages";
 import ProfilePicture from "../../assets/user-prof.png";
 import { saveData } from "../../services/Team";
 import { teamObject } from "../../constants";
+import { STATUS } from "../../constants/common";
 import { populateFormData } from "../../helpers";
 import Errors from "../Layouts/Errors";
 
@@ -193,7 +195,7 @@ function AddTeam() {
               onChange={updateState}
             ></InputTextarea>
           </div>
-          <div className="col-md-6 mt-2 pt-2">
+          <div className="col-md-3 mt-2 pt-2">
             <label htmlFor="slug" className="control-label">
               Slug
             </label>
@@ -204,6 +206,18 @@ function AddTeam() {
               value={team.slug}
               onChange={updateState}
             ></InputText>
+          </div>
+          <div className="col-md-3 mt-2 pt-2">
+            <label htmlFor="status" className="control-label">Status</label>
+            <Dropdown
+              id="status"
+              name="status"
+              options={STATUS}
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              value={team.status}
+              onChange={updateState}
+            ></Dropdown>
           </div>
         </div>
 

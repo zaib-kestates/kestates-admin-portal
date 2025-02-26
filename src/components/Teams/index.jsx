@@ -25,6 +25,13 @@ function Team() {
     );
   };
 
+  const nameTemplate = (team) => {
+    return <div className='d-flex align-items-center dv-image-template'>
+      <img src={team.picture} />
+      <label>{team.name}</label>
+    </div>
+  }
+
   // Handle cancel metadata
   const handleCancel = (e, isSave = false) => {
     e.preventDefault();
@@ -73,6 +80,7 @@ function Team() {
 
       {/* Table */}
       <DataTable value={teams} stripedRows paginator rows={10}>
+        <Column header="Name" body={nameTemplate} />
         {TeamColumns.map((column, index) => (
           <Column
             key={column.field}
