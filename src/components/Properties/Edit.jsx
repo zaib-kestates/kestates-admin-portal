@@ -12,7 +12,7 @@ import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
 import useFetchLocations from "../../hooks/useFetchLocations";
 import useFetchTeams from "../../hooks/useFetchTeams";
 import { populateFormData } from "../../helpers";
-import Blog from "../../assets/blog.jpg";
+import Errors from "../Layouts/Errors";
 
 function EditProperty() {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ function EditProperty() {
   const imageRef = useRef();
   const [property, setProperty] = useState();
   const [file, setFile] = useState();
+  const [errors, setErrors] = useState();
   const propertyTypes = useFetchPropertyTypes();
   const locations = useFetchLocations();
   const teams = useFetchTeams();
@@ -48,17 +49,19 @@ function EditProperty() {
     // Add data in form object (for image)
     const formData = populateFormData(property);
     formData.append("file", file);
+    console.log(formData);
 
     // Save data
     try {
       await updateData(params.id, formData);
+      setErrors(null);
 
       navigate("/properties", {
         state: { showMessage: true },
       });
     } catch (error) {
-      console.log(error.response.data.messages);
-    } 
+      setErrors(error.response.data.messages);
+    }
   };
 
   const updateState = (e) => {
@@ -81,7 +84,11 @@ function EditProperty() {
   if (!property) return;
   return (
     <>
+      {/* Header */}
       <label className="page-header">Edit Property</label>
+
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
 
       <form>
         <div className="row">
