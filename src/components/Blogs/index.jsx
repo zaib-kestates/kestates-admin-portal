@@ -7,6 +7,8 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Paginator } from 'primereact/paginator';
 import { Messages } from 'primereact/messages';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { getData } from '../../services/Blog';
 import { BlogColumns, messageTemplate } from '../../constants';
@@ -24,8 +26,8 @@ function Blogs() {
 
   const actionTemplate = (blog) => {
     return (
-      <a className="link-edit" onClick={() => navigate(`/blogs/${blog.id}`)}>
-        Edit
+      <a onClick={() => navigate(`/blogs/${blog.id}`)}>
+        <FontAwesomeIcon icon={faEdit} className='icon-edit' />
       </a>
     );
   };
