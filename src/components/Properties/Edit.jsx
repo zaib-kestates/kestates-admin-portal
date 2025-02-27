@@ -195,7 +195,7 @@ function EditProperty() {
             <InputText
               name="price"
               className="form-control"
-              value={property.price}
+              value={property.price.replaceAll(',', '')}
               onChange={updateState}
             ></InputText>
           </div>
