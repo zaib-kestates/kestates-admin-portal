@@ -10,6 +10,7 @@ import { Editor } from 'primereact/editor';
 import { getData, updateData } from '../../services/Blog';
 import useFetchCategories from '../../hooks/useFetchCategories';
 import { populateFormData } from '../../helpers';
+import { STATUS } from '../../constants/blogs';
 import Errors from '../Layouts/Errors';
 
 function EditBlog() {
@@ -122,7 +123,7 @@ function EditBlog() {
                   onChange={updateState}
                 ></Dropdown>
               </div>
-              <div className="col-md-12 mt-2 pt-2">
+              <div className="col-md-6 mt-2 pt-2">
                 <label htmlFor="slug" className="control-label">
                   Slug
                 </label>
@@ -132,6 +133,18 @@ function EditBlog() {
                   value={blog.slug}
                   onChange={updateState}
                 ></InputText>
+              </div>
+              <div className="col-md-6 mt-2 pt-2">
+                <label htmlFor="status" className="control-label">
+                  Status
+                </label>
+                <Dropdown
+                  name="status"
+                  options={STATUS}
+                  className="w-full md:w-14rem"
+                  placeholder="Select"
+                  value={blog.status}
+                  onChange={updateState}></Dropdown>
               </div>
             </div>
           </div>
