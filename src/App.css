@@ -188,6 +188,7 @@ div.alert {
   width: 18%;
 }
 
-.ql-container.ql-snow {
+.ql-container.ql-snow,
+.property-description {
   height: 600px;
 }

@@ -276,7 +276,7 @@ function EditProperty() {
             </label>
             <InputTextarea
               name="description"
-              className="form-control"
+              className="form-control property-description"
               rows="8"
               value={property.description}
               onChange={updateState}
