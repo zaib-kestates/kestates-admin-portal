@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from "react";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { Button } from "primereact/button";
-import { Image } from "primereact/image";
-import { Messages } from "primereact/messages";
+import { useState, useEffect, useRef } from 'react';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Button } from 'primereact/button';
+import { Image } from 'primereact/image';
+import { Messages } from 'primereact/messages';
 
-import { messageTemplate } from "../../constants";
-import { getData, saveData } from "../../services/AboutUs";
-import Errors from "../Layouts/Errors";
-import "./index.css";
+import { messageTemplate } from '../../constants';
+import { getData, saveData } from '../../services/AboutUs';
+import Errors from '../Layouts/Errors';
+import './index.css';
 
 function AboutUs() {
   const bannerRef = useRef(null);
@@ -49,23 +49,23 @@ function AboutUs() {
 
     // Add data in form object (for images)
     const formData = new FormData();
-    formData.append("header", data.metadata.header);
-    formData.append("title", data.metadata.title);
-    formData.append("description", data.metadata.description);
-    formData.append("about", data.pageData[0].value);
-    formData.append("team", data.pageData[1].value);
-    formData.append("file1", file1);
-    formData.append("file2", file2);
-    window.scrollTo(0,0);
+    formData.append('header', data.metadata.header);
+    formData.append('title', data.metadata.title);
+    formData.append('description', data.metadata.description);
+    formData.append('about', data.pageData[0].value);
+    formData.append('team', data.pageData[1].value);
+    formData.append('file1', file1);
+    formData.append('file2', file2);
+    window.scrollTo(0, 0);
 
     console.log(formData);
 
     try {
       await saveData(formData);
       setErrors(null);
-      
+
       message.current.show(
-        messageTemplate("success", "Data saved successfully")
+        messageTemplate('success', 'Data saved successfully')
       );
     } catch (error) {
       setErrors(error.response.data.messages);
@@ -134,7 +134,7 @@ function AboutUs() {
       <label className="page-subheader mt-3 pt-2">Team</label>
       <form>
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-2">
             <Image
               src={teamImage}
               className="image-aboutus-team"
@@ -149,10 +149,10 @@ function AboutUs() {
               }}
             />
           </div>
-          <div className="col-md-9 mt-2">
+          <div className="col-md-10">
             <InputTextarea
               name="team"
-              className="form-control"
+              className="form-control team"
               rows={5}
               value={data.pageData[1].value}
               onChange={(e) => updatePageData(e, 1)}

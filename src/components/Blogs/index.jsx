@@ -1,15 +1,16 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation, Meta } from "react-router-dom";
-import { Dialog } from "primereact/dialog";
-import DialogHeader from "../Layouts/DialogHeader";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import { Paginator } from "primereact/paginator";
-import { Messages } from "primereact/messages";
-import { getData } from "../../services/Blog";
-import { BlogColumns, messageTemplate } from "../../constants";
-import Metadata from "./Metadata";
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation, Meta } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
+import DialogHeader from '../Layouts/DialogHeader';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Paginator } from 'primereact/paginator';
+import { Messages } from 'primereact/messages';
+
+import { getData } from '../../services/Blog';
+import { BlogColumns, messageTemplate } from '../../constants';
+import Metadata from './Metadata';
 
 function Blogs() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ function Blogs() {
 
     if (isSave) {
       message.current.show(
-        messageTemplate("success", "Metadata saved successfully")
+        messageTemplate('success', 'Metadata saved successfully')
       );
     }
   };
@@ -46,7 +47,7 @@ function Blogs() {
   const handlePageChange = (e) => {
     setFirst(e.first);
     setPageNumber(++e.page);
-  }
+  };
 
   // Function to get data
   const fetchData = async () => {
@@ -62,7 +63,7 @@ function Blogs() {
     // Show message if state exists
     if (location.state) {
       message.current.show(
-        messageTemplate("success", "Blog saved successfully")
+        messageTemplate('success', 'Blog saved successfully')
       );
     }
   }, [pageNumber]);
@@ -79,7 +80,7 @@ function Blogs() {
           className="me-2"
           onClick={() => setShowMetadata(true)}
         />
-        <Button label="Add" onClick={() => navigate("/blogs/add")} />
+        <Button label="Add" onClick={() => navigate('/blogs/add')} />
       </div>
 
       {/* Table */}
@@ -95,7 +96,7 @@ function Blogs() {
         <Column
           header=""
           className="text-center"
-          style={{ width: "9%" }}
+          style={{ width: '9%' }}
           body={actionTemplate}
         ></Column>
       </DataTable>

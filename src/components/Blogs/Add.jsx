@@ -1,18 +1,19 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { Dropdown } from "primereact/dropdown";
-import { Image } from "primereact/image";
-import { Button } from "primereact/button";
-import { Editor } from "primereact/editor";
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown } from 'primereact/dropdown';
+import { Image } from 'primereact/image';
+import { Button } from 'primereact/button';
+import { Editor } from 'primereact/editor';
 
-import useFetchCategories from "../../hooks/useFetchCategories";
-import { blogTemplate } from "../../constants";
-import { saveData } from "../../services/Blog";
-import Blog from "../../assets/blog.jpg";
-import { populateFormData } from "../../helpers";
-import Errors from "../Layouts/Errors";
+import useFetchCategories from '../../hooks/useFetchCategories';
+import { blogTemplate } from '../../constants';
+import { saveData } from '../../services/Blog';
+import Blog from '../../assets/blog.jpg';
+import { populateFormData } from '../../helpers';
+import { STATUS } from '../../constants/blogs';
+import Errors from '../Layouts/Errors';
 
 function AddBlog() {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ function AddBlog() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate("/blogs");
+    navigate('/blogs');
   };
 
   // Function to update state
@@ -50,14 +51,14 @@ function AddBlog() {
     // Save data
     try {
       await saveData(formData);
-      navigate("/blogs", {
+      navigate('/blogs', {
         state: {
           showMessage: true,
         },
       });
     } catch (error) {
       setErrors(error.response.data.messages);
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -96,7 +97,7 @@ function AddBlog() {
                   value={blog.title}
                   onChange={updateState}
                 ></InputText>
-              </div>{" "}
+              </div>{' '}
               <div className="col-md-12 mt-2 pt-2">
                 <label htmlFor="category" className="control-label">
                   Category
@@ -112,7 +113,7 @@ function AddBlog() {
                   onChange={updateState}
                 ></Dropdown>
               </div>
-              <div className="col-md-12 mt-2 pt-2">
+              <div className="col-md-6 mt-2 pt-2">
                 <label htmlFor="slug" className="control-label">
                   Slug
                 </label>
@@ -122,6 +123,19 @@ function AddBlog() {
                   value={blog.slug}
                   onChange={updateState}
                 ></InputText>
+              </div>
+              <div className="col-md-6 mt-2 pt-2">
+                <label htmlFor="status" className="control-label">
+                  Status
+                </label>
+                <Dropdown
+                  name="status"
+                  options={STATUS}
+                  className="w-full md:w-14rem"
+                  placeholder="Select"
+                  value={blog.status}
+                  onChange={updateState}
+                ></Dropdown>
               </div>
             </div>
           </div>
@@ -144,7 +158,6 @@ function AddBlog() {
           </label>
           <Editor
             name="description"
-            style={{ height: "200px" }}
             value={blog.description}
             onTextChange={(e) => setBlog({ ...blog, description: e.htmlValue })}
           />

@@ -187,3 +187,7 @@ div.alert {
   margin-right: 9px;
   width: 18%;
 }
+
+.ql-container.ql-snow {
+  height: 600px;
+}

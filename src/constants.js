@@ -1,160 +1,160 @@
 exports.TeamColumns = [
   {
-    header: "Title",
-    field: "title",
+    header: 'Title',
+    field: 'title',
   },
   {
-    header: "Email",
-    field: "email",
+    header: 'Email',
+    field: 'email',
   },
   {
-    header: "Department",
-    field: "Department.name",
+    header: 'Department',
+    field: 'Department.name',
   },
   {
-    header: "Status",
-    field: "status",
+    header: 'Status',
+    field: 'status',
   },
 ];
 
 exports.BlogColumns = [
   {
-    header: "Title",
-    field: "title",
-    width: "20%",
+    header: 'Title',
+    field: 'title',
+    width: '20%',
   },
   {
-    header: "Caption",
-    field: "caption",
-    width: "45%",
+    header: 'Caption',
+    field: 'caption',
+    width: '45%',
   },
   {
-    header: "Category",
-    field: "BlogCategory.name",
-    width: "15%",
+    header: 'Category',
+    field: 'BlogCategory.name',
+    width: '15%',
   },
   {
-    header: "Slug",
-    field: "slug",
-    width: "12%",
+    header: 'Status',
+    field: 'status',
+    width: '12%',
   },
 ];
 
 exports.BlogCategoryColumns = [
   {
-    header: "Name",
-    field: "name",
+    header: 'Name',
+    field: 'name',
   },
 ];
 
 exports.PartnerColumns = [
   {
-    header: "Name",
-    field: "name",
-    width: "15%",
+    header: 'Name',
+    field: 'name',
+    width: '15%',
   },
   {
-    header: "Url",
-    field: "url",
-    width: "35%",
+    header: 'Url',
+    field: 'url',
+    width: '35%',
   },
 ];
 
 exports.DepartmentColumns = [
   {
-    header: "Name",
-    field: "name",
-    width: "15%",
+    header: 'Name',
+    field: 'name',
+    width: '15%',
   },
   {
-    header: "Sorting Priority",
-    field: "sorting_priority",
-    width: "35%",
+    header: 'Sorting Priority',
+    field: 'sorting_priority',
+    width: '35%',
   },
 ];
 
 exports.LocationColumns = [
   {
-    header: "Name",
-    field: "name",
-    width: "15%",
+    header: 'Name',
+    field: 'name',
+    width: '15%',
   },
   {
-    header: "State",
-    field: "State.name",
-    width: "35%",
+    header: 'State',
+    field: 'State.name',
+    width: '35%',
   },
 ];
 
 exports.LanguageColumns = [
   {
-    header: "Code",
-    field: "code",
-    width: "15%",
+    header: 'Code',
+    field: 'code',
+    width: '15%',
   },
   {
-    header: "Name",
-    field: "name",
-    width: "35%",
+    header: 'Name',
+    field: 'name',
+    width: '35%',
   },
 ];
 
 exports.homeObject = {
   metadata: {
-    title: "",
-    header: "",
-    description: "",
+    title: '',
+    header: '',
+    description: '',
   },
 };
 
 exports.teamObject = {
   file: null,
-  name: "",
-  title: "",
-  message: "",
-  email: "",
-  contact_number: "",
-  slug: "",
-  DepartmentId: "",
+  name: '',
+  title: '',
+  message: '',
+  email: '',
+  contact_number: '',
+  slug: '',
+  DepartmentId: '',
   LanguageIds: [],
 };
 
 exports.blogTemplate = {
-  title: "",
-  caption: "",
-  description: "",
-  slug: "",
-  BlogCategoryId: "",
+  title: '',
+  caption: '',
+  description: '',
+  slug: '',
+  BlogCategoryId: '',
 };
 
 exports.partnerTemplate = {
-  file: "",
-  name: "",
-  url: "",
+  file: '',
+  name: '',
+  url: '',
 };
 
 exports.departmentTemplate = {
-  name: "",
-  sorting_priority: "",
+  name: '',
+  sorting_priority: '',
 };
 
 exports.locationTemplate = {
-  name: "",
-  stateId: "",
+  name: '',
+  stateId: '',
 };
 
 exports.languageTemplate = {
-  code: "",
-  name: "",
+  code: '',
+  name: '',
 };
 
 exports.aboutUsTemplate = {
-  about: "",
-  team: "",
+  about: '',
+  team: '',
   metadata: {
-    title: "",
-    header: "",
-    description: "",
+    title: '',
+    header: '',
+    description: '',
   },
 };
 
