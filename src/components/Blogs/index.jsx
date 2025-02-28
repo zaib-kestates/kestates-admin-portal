@@ -26,7 +26,7 @@ function Blogs() {
 
   const actionTemplate = (blog) => {
     return (
-      <a onClick={() => navigate(`/blogs/${blog.id}`)}>
+      <a href="#" onClick={() => navigate(`/blogs/${blog.id}`)}>
         <FontAwesomeIcon icon={faEdit} className='icon-edit' />
       </a>
     );

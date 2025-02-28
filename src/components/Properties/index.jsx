@@ -27,13 +27,13 @@ function Properties() {
   const actionTemplate = (blog) => {
     return (
       <>
-        <a
+        <a href=""
           className="me-3"
           onClick={() => navigate(`/properties/${blog.id}`)}
         >
           <FontAwesomeIcon icon={faEdit} className="icon-edit" />
         </a>
-        <a>
+        <a href="">
           <FontAwesomeIcon icon={faTrash} className="icon-delete" />
         </a>
       </>

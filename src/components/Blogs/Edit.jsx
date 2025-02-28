@@ -1,17 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { Image } from 'primereact/image';
-import { Button } from 'primereact/button';
-import { Editor } from 'primereact/editor';
+import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
+import { Editor } from "primereact/editor";
 
-import { getData, updateData } from '../../services/Blog';
-import useFetchCategories from '../../hooks/useFetchCategories';
-import { populateFormData } from '../../helpers';
-import { STATUS } from '../../constants/blogs';
-import Errors from '../Layouts/Errors';
+import { getData, updateData } from "../../services/Blog";
+import useFetchCategories from "../../hooks/useFetchCategories";
+import { populateFormData } from "../../helpers";
+import { STATUS } from "../../constants/blogs";
+import MetadataForm from "./Metadata-form";
+import Errors from "../Layouts/Errors";
 
 function EditBlog() {
   const { id } = useParams();
@@ -32,7 +33,7 @@ function EditBlog() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate('/blogs');
+    navigate("/blogs");
   };
 
   // Function to update state
@@ -57,7 +58,7 @@ function EditBlog() {
     // Update data
     try {
       await updateData(id, formData);
-      navigate('/blogs', {
+      navigate("/blogs", {
         state: { showMessage: true },
       });
     } catch (error) {
@@ -107,7 +108,7 @@ function EditBlog() {
                   value={blog.title}
                   onChange={updateState}
                 ></InputText>
-              </div>{' '}
+              </div>{" "}
               <div className="col-md-12 mt-2 pt-2">
                 <label htmlFor="category" className="control-label">
                   Category
@@ -144,7 +145,8 @@ function EditBlog() {
                   className="w-full md:w-14rem"
                   placeholder="Select"
                   value={blog.status}
-                  onChange={updateState}></Dropdown>
+                  onChange={updateState}
+                ></Dropdown>
               </div>
             </div>
           </div>
@@ -171,6 +173,13 @@ function EditBlog() {
             onTextChange={(e) => setBlog({ ...blog, description: e.htmlValue })}
           />
         </div>
+
+        {/* Metadata */}
+        <MetadataForm
+          title={blog.metadata_title}
+          description={blog.metadata_description}
+          updateState={updateState}
+        />
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
           <Button label="Save" onClick={save} />

@@ -11,6 +11,7 @@ import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
 import useFetchTeams from "../../hooks/useFetchTeams";
 import useFetchLocations from "../../hooks/useFetchLocations";
 import { populateFormData } from "../../helpers";
+import MetadataForm from "../Blogs/Metadata-form";
 import Blog from "../../assets/blog.jpg";
 
 const departments = [
@@ -44,7 +45,7 @@ function AddProperty() {
 
   const handleFileChange = (e) => {
     setFile(URL.createObjectURL(e.target.files[0]));
-  }
+  };
 
   // Handle cancel click
   const handleCancel = (e) => {
@@ -246,6 +247,9 @@ function AddProperty() {
             ></InputTextarea>
           </div>
         </div>
+
+        {/* Metadata */}
+        <MetadataForm title={""} description={""} updateState={updateState} />
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
           <Button label="Save" onClick={handleSave} />
