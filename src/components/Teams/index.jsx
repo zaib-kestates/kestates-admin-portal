@@ -5,6 +5,9 @@ import { Dialog } from 'primereact/dialog';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { Messages } from 'primereact/messages';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+
 import { TeamColumns, messageTemplate } from '../../constants';
 import { getData } from '../../services/Team';
 import DialogHeader from '../Layouts/DialogHeader';
@@ -19,18 +22,20 @@ function Team() {
 
   const actionTemplate = (team) => {
     return (
-      <a className="link-edit" onClick={() => navigate(`/teams/${team.id}`)}>
-        Edit
+      <a href="#" onClick={() => navigate(`/teams/${team.id}`)}>
+        <FontAwesomeIcon icon={faEdit} className="icon-edit" />
       </a>
     );
   };
 
   const nameTemplate = (team) => {
-    return <div className='d-flex align-items-center dv-image-template'>
-      <img src={team.picture} />
-      <label>{team.name}</label>
-    </div>
-  }
+    return (
+      <div className="d-flex align-items-center dv-image-template">
+        <img src={team.picture} />
+        <label>{team.name}</label>
+      </div>
+    );
+  };
 
   // Handle cancel metadata
   const handleCancel = (e, isSave = false) => {
