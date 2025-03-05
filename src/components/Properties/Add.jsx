@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
+import { MultiSelect } from "primereact/multiselect";
 import { Image } from "primereact/image";
 import { Button } from "primereact/button";
 
@@ -10,6 +11,7 @@ import { propertyStatus, publishStatus } from "../../constants/properties";
 import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
 import useFetchTeams from "../../hooks/useFetchTeams";
 import useFetchLocations from "../../hooks/useFetchLocations";
+import useFetchAmenities from "../../hooks/useFetchAmenities";
 import { populateFormData } from "../../helpers";
 import MetadataForm from "../Blogs/Metadata-form";
 import Blog from "../../assets/blog.jpg";
@@ -42,6 +44,7 @@ function AddProperty() {
   const propertyTypes = useFetchPropertyTypes();
   const locations = useFetchLocations();
   const teams = useFetchTeams();
+  const amenities = useFetchAmenities();
 
   const handleFileChange = (e) => {
     setFile(URL.createObjectURL(e.target.files[0]));
@@ -169,7 +172,7 @@ function AddProperty() {
               onChange={updateState}
             ></InputText>
           </div>
-          <div className="col-md-6 mt-2 pt-2">
+          <div className="col-md-3 mt-2 pt-2">
             <label htmlFor="department" className="control-label">
               Status
             </label>
@@ -181,7 +184,7 @@ function AddProperty() {
               onChange={updateState}
             ></Dropdown>
           </div>
-          <div className="col-md-6 mt-2 pt-2">
+          <div className="col-md-3 mt-2 pt-2">
             <label htmlFor="department" className="control-label">
               Publish Status
             </label>
@@ -234,6 +237,25 @@ function AddProperty() {
               optionValue="id"
               onChange={updateState}
             ></Dropdown>
+          </div>
+          <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="Amenities" className="control-label">
+              Amenities
+            </label>
+            <MultiSelect
+              name="Amenities"
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              optionLabel="name"
+              optionValue="id"
+              options={amenities}
+              onChange={(e) =>
+                setProperty({
+                  ...property,
+                  Amenities: e.value,
+                })
+              }
+            ></MultiSelect>
           </div>
           <div className="col-md-12 pt-2 mt-2">
             <label htmlFor="caption" className="control-label">

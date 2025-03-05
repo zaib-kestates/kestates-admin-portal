@@ -54,7 +54,6 @@ function EditProperty() {
     // Add data in form object (for image)
     const formData = populateFormData(property);
     formData.append("file", file);
-    console.log(formData);
 
     // Save data
     try {

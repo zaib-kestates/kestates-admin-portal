@@ -88,7 +88,7 @@ function Properties() {
           className="me-2"
           onClick={() => setShowMetadata(true)}
         />
-        {/*<Button label="Add" onClick={() => navigate("/properties/add")} />*/}
+        <Button label="Add" onClick={() => navigate("/properties/add")} />
       </div>
 
       <DataTable value={properties} stripedRows>
