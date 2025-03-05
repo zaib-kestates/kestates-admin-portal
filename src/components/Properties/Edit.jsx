@@ -58,9 +58,9 @@ function EditProperty() {
       await updateData(params.id, formData);
       setErrors(null);
 
-      /*navigate('/properties', {
+      navigate('/properties', {
         state: { showMessage: true },
-      });*/
+      });
     } catch (error) {
       setErrors(error.response.data.messages);
     }
