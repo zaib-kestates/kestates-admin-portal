@@ -1,20 +1,22 @@
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { Image } from 'primereact/image';
-import { Button } from 'primereact/button';
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { MultiSelect } from "primereact/multiselect";
+import { Dropdown } from "primereact/dropdown";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
 
-import { getData, updateData } from '../../services/Property';
-import { publishStatus, propertyStatus } from '../../constants/properties';
-import useFetchPropertyTypes from '../../hooks/useFetchPropertyTypes';
-import useFetchLocations from '../../hooks/useFetchLocations';
-import useFetchTeams from '../../hooks/useFetchTeams';
-import MetadataFrom from '../Blogs/Metadata-form';
-import { populateFormData } from '../../helpers';
-import Errors from '../Layouts/Errors';
-import MetadataForm from '../Blogs/Metadata-form';
+import { getData, updateData } from "../../services/Property";
+import { publishStatus, propertyStatus } from "../../constants/properties";
+import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
+import useFetchLocations from "../../hooks/useFetchLocations";
+import useFetchTeams from "../../hooks/useFetchTeams";
+import useFetchAmenities from "../../hooks/useFetchAmenities";
+import MetadataFrom from "../Blogs/Metadata-form";
+import { populateFormData } from "../../helpers";
+import Errors from "../Layouts/Errors";
+import MetadataForm from "../Blogs/Metadata-form";
 
 function EditProperty() {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ function EditProperty() {
   const propertyTypes = useFetchPropertyTypes();
   const locations = useFetchLocations();
   const teams = useFetchTeams();
+  const amenities = useFetchAmenities();
 
   // Handle file change
   const handleFileChange = (e) => {
@@ -41,7 +44,7 @@ function EditProperty() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate('/properties');
+    navigate("/properties");
   };
 
   // Handle save click
@@ -50,7 +53,7 @@ function EditProperty() {
 
     // Add data in form object (for image)
     const formData = populateFormData(property);
-    formData.append('file', file);
+    formData.append("file", file);
     console.log(formData);
 
     // Save data
@@ -58,7 +61,7 @@ function EditProperty() {
       await updateData(params.id, formData);
       setErrors(null);
 
-      navigate('/properties', {
+      navigate("/properties", {
         state: { showMessage: true },
       });
     } catch (error) {
@@ -201,7 +204,7 @@ function EditProperty() {
               onChange={updateState}
             ></InputText>
           </div>
-          <div className="col-md-6 mt-2 pt-2">
+          <div className="col-md-3 mt-2 pt-2">
             <label htmlFor="department" className="control-label">
               Status
             </label>
@@ -214,7 +217,7 @@ function EditProperty() {
               onChange={updateState}
             ></Dropdown>
           </div>
-          <div className="col-md-6 mt-2 pt-2">
+          <div className="col-md-3 mt-2 pt-2">
             <label htmlFor="department" className="control-label">
               Publish Status
             </label>
@@ -271,6 +274,27 @@ function EditProperty() {
               value={property.TeamId}
               onChange={updateState}
             ></Dropdown>
+          </div>
+          <div className="col-md-6 mt-2 pt-2">
+            <label htmlFor="Amenities" className="control-label">
+              Amenities
+            </label>
+            <MultiSelect
+              name="Amenities"
+              style={{ height: "130px" }}
+              className="w-full md:w-14rem"
+              placeholder="Select"
+              optionLabel="name"
+              optionValue="id"
+              options={amenities}
+              value={property.Amenities}
+              onChange={(e) =>
+                setProperty({
+                  ...property,
+                  Amenities: e.value,
+                })
+              }
+            ></MultiSelect>
           </div>
           <div className="col-md-12 pt-2 mt-2">
             <label htmlFor="caption" className="control-label">

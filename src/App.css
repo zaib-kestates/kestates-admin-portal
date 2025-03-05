@@ -200,3 +200,7 @@ div.alert {
 .icon-delete {
   color: #ff3232;
 }
+
+.p-multiselect-label {
+  white-space: collapse;
+}
