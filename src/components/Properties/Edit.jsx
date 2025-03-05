@@ -1,18 +1,20 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { Dropdown } from "primereact/dropdown";
-import { Image } from "primereact/image";
-import { Button } from "primereact/button";
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown } from 'primereact/dropdown';
+import { Image } from 'primereact/image';
+import { Button } from 'primereact/button';
 
-import { getData, updateData } from "../../services/Property";
-import { publishStatus, propertyStatus } from "../../constants/properties";
-import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
-import useFetchLocations from "../../hooks/useFetchLocations";
-import useFetchTeams from "../../hooks/useFetchTeams";
-import { populateFormData } from "../../helpers";
-import Errors from "../Layouts/Errors";
+import { getData, updateData } from '../../services/Property';
+import { publishStatus, propertyStatus } from '../../constants/properties';
+import useFetchPropertyTypes from '../../hooks/useFetchPropertyTypes';
+import useFetchLocations from '../../hooks/useFetchLocations';
+import useFetchTeams from '../../hooks/useFetchTeams';
+import MetadataFrom from '../Blogs/Metadata-form';
+import { populateFormData } from '../../helpers';
+import Errors from '../Layouts/Errors';
+import MetadataForm from '../Blogs/Metadata-form';
 
 function EditProperty() {
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ function EditProperty() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate("/properties");
+    navigate('/properties');
   };
 
   // Handle save click
@@ -48,7 +50,7 @@ function EditProperty() {
 
     // Add data in form object (for image)
     const formData = populateFormData(property);
-    formData.append("file", file);
+    formData.append('file', file);
     console.log(formData);
 
     // Save data
@@ -56,9 +58,9 @@ function EditProperty() {
       await updateData(params.id, formData);
       setErrors(null);
 
-      navigate("/properties", {
+      /*navigate('/properties', {
         state: { showMessage: true },
-      });
+      });*/
     } catch (error) {
       setErrors(error.response.data.messages);
     }
@@ -195,7 +197,7 @@ function EditProperty() {
             <InputText
               name="price"
               className="form-control"
-              value={property.price.replaceAll(',', '')}
+              value={property.price}
               onChange={updateState}
             ></InputText>
           </div>
@@ -283,6 +285,13 @@ function EditProperty() {
             ></InputTextarea>
           </div>
         </div>
+
+        {/* Metadata */}
+        <MetadataForm
+          title={property.metadata_title}
+          description={property.metadata_description}
+          updateState={updateState}
+        />
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
           <Button label="Save" onClick={handleSave} />

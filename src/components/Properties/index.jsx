@@ -1,18 +1,18 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Dialog } from "primereact/dialog";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Button } from "primereact/button";
-import { Messages } from "primereact/messages";
-import { Paginator } from "primereact/paginator";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+import { Messages } from 'primereact/messages';
+import { Paginator } from 'primereact/paginator';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import DialogHeader from "../Layouts/DialogHeader";
-import Metadata from "./Metadata";
-import { messageTemplate } from "../../constants";
-import { getData } from "../../services/Property";
+import DialogHeader from '../Layouts/DialogHeader';
+import Metadata from './Metadata';
+import { messageTemplate } from '../../constants';
+import { getData } from '../../services/Property';
 
 function Properties() {
   const message = useRef(null);
@@ -27,15 +27,16 @@ function Properties() {
   const actionTemplate = (blog) => {
     return (
       <>
-        <a href=""
+        <a
+          href=""
           className="me-3"
           onClick={() => navigate(`/properties/${blog.id}`)}
         >
           <FontAwesomeIcon icon={faEdit} className="icon-edit" />
         </a>
-        <a href="">
+        {/*<a href="">
           <FontAwesomeIcon icon={faTrash} className="icon-delete" />
-        </a>
+        </a>*/}
       </>
     );
   };
@@ -48,7 +49,7 @@ function Properties() {
 
     if (isSave) {
       message.current.show(
-        messageTemplate("success", "Metadata saved successfully")
+        messageTemplate('success', 'Metadata saved successfully')
       );
     }
   };
@@ -70,7 +71,7 @@ function Properties() {
 
     if (location.state) {
       message.current.show(
-        messageTemplate("success", "Property updated successfully")
+        messageTemplate('success', 'Property updated successfully')
       );
     }
   }, [pageNumber]);
@@ -87,11 +88,11 @@ function Properties() {
           className="me-2"
           onClick={() => setShowMetadata(true)}
         />
-        <Button label="Add" onClick={() => navigate("/properties/add")} />
+        {/*<Button label="Add" onClick={() => navigate("/properties/add")} />*/}
       </div>
 
       <DataTable value={properties} stripedRows>
-        <Column header="Title" field="title" style={{ width: "30%" }}></Column>
+        <Column header="Title" field="title" style={{ width: '30%' }}></Column>
         <Column header="Slug" field="slug"></Column>
         <Column header="Location" field="Location.name"></Column>
         <Column header="Type" field="PropertyType.name"></Column>
@@ -100,7 +101,7 @@ function Properties() {
         <Column
           header=""
           className="text-center"
-          style={{ width: "9%" }}
+          style={{ width: '9%' }}
           body={actionTemplate}
         ></Column>
       </DataTable>
