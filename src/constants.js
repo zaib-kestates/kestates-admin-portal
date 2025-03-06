@@ -158,6 +158,27 @@ exports.aboutUsTemplate = {
   },
 };
 
+exports.propertyTemplate = {
+  title: '',
+  description: '',
+  price: '',
+  bed: '',
+  path: '',
+  size: '',
+  permit_no: '',
+  qr_code_link: '',
+  slug: '',
+  status: '',
+  reference_number: '',
+  metadata_title: '',
+  metadata_description: '',
+  publish_status: '',
+  PropertyTypeId: '',
+  LocationId: '',
+  TeamId: '',
+  Amenities: [],
+};
+
 exports.messageTemplate = (
   severity,
   detail,

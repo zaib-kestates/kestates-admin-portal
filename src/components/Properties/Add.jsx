@@ -1,44 +1,28 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { Dropdown } from "primereact/dropdown";
-import { MultiSelect } from "primereact/multiselect";
-import { Image } from "primereact/image";
-import { Button } from "primereact/button";
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
+import { Image } from 'primereact/image';
+import { Button } from 'primereact/button';
 
-import { propertyStatus, publishStatus } from "../../constants/properties";
-import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
-import useFetchTeams from "../../hooks/useFetchTeams";
-import useFetchLocations from "../../hooks/useFetchLocations";
-import useFetchAmenities from "../../hooks/useFetchAmenities";
-import { populateFormData } from "../../helpers";
-import MetadataForm from "../Blogs/Metadata-form";
-import Blog from "../../assets/blog.jpg";
-
-const departments = [
-  {
-    name: "Management",
-    code: 1,
-  },
-  { name: "Sales", code: 2 },
-];
-
-const languages = [
-  {
-    name: "English",
-    code: "en",
-  },
-  {
-    name: "Arabic",
-    code: "ar",
-  },
-];
+import { propertyStatus, publishStatus } from '../../constants/properties';
+import useFetchPropertyTypes from '../../hooks/useFetchPropertyTypes';
+import useFetchTeams from '../../hooks/useFetchTeams';
+import useFetchLocations from '../../hooks/useFetchLocations';
+import useFetchAmenities from '../../hooks/useFetchAmenities';
+import { populateFormData } from '../../helpers';
+import { propertyTemplate } from '../../constants';
+import { saveData } from '../../services/Property';
+import MetadataForm from '../Blogs/Metadata-form';
+import Errors from '../Layouts/Errors';
+import Blog from '../../assets/blog.jpg';
 
 function AddProperty() {
   const [file, setFile] = useState(Blog);
   const [errors, setErrors] = useState();
-  const [property, setProperty] = useState();
+  const [property, setProperty] = useState(propertyTemplate);
   const imageRef = useRef();
   const navigate = useNavigate();
   const propertyTypes = useFetchPropertyTypes();
@@ -48,28 +32,48 @@ function AddProperty() {
 
   const handleFileChange = (e) => {
     setFile(URL.createObjectURL(e.target.files[0]));
+    setProperty({
+      ...property,
+      file: e.target.files[0],
+    });
   };
 
   // Handle cancel click
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate("/properties");
+    navigate('/properties');
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
 
     // Add data in form object (for image)
     const formData = populateFormData(property);
+    console.log(formData);
+
+    try {
+      await saveData(formData);
+      setErrors(null);
+    } catch (error) {
+      setErrors(error.response.data.messages);
+    }
   };
 
-  const updateState = (e) => {};
+  const updateState = (e) => {
+    setProperty({
+      ...property,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <>
       {/* Header */}
       <label className="page-header">Add Property</label>
+
+      {/* Errors */}
+      {errors && <Errors errors={errors} />}
 
       {/* Form */}
       <form>
@@ -89,6 +93,7 @@ function AddProperty() {
             <InputText
               name="title"
               className="form-control"
+              value={property.title}
               onChange={updateState}
             ></InputText>
           </div>
@@ -99,6 +104,7 @@ function AddProperty() {
             <InputText
               name="bed"
               className="form-control"
+              value={property.bed}
               onChange={updateState}
             ></InputText>
           </div>
@@ -109,6 +115,7 @@ function AddProperty() {
             <InputText
               name="bath"
               className="form-control"
+              value={property.bath}
               onChange={updateState}
             ></InputText>
           </div>
@@ -119,6 +126,7 @@ function AddProperty() {
             <InputText
               name="size"
               className="form-control"
+              value={property.size}
               onChange={updateState}
             ></InputText>
           </div>
@@ -129,6 +137,7 @@ function AddProperty() {
             <InputText
               name="permit_no"
               className="form-control"
+              value={property.permit_no}
               onChange={updateState}
             ></InputText>
           </div>
@@ -139,6 +148,7 @@ function AddProperty() {
             <InputText
               name="reference_number"
               className="form-control"
+              value={property.reference_number}
               onChange={updateState}
             ></InputText>
           </div>
@@ -149,6 +159,7 @@ function AddProperty() {
             <InputText
               name="slug"
               className="form-control"
+              value={property.slug}
               onChange={updateState}
             ></InputText>
           </div>
@@ -159,6 +170,7 @@ function AddProperty() {
             <InputText
               name="qr_code_link"
               className="form-control"
+              value={property.qr_code_link}
               onChange={updateState}
             ></InputText>
           </div>
@@ -169,6 +181,7 @@ function AddProperty() {
             <InputText
               name="price"
               className="form-control"
+              value={property.price}
               onChange={updateState}
             ></InputText>
           </div>
@@ -181,6 +194,7 @@ function AddProperty() {
               options={propertyStatus}
               className="w-full md:w-14rem"
               placeholder="Select"
+              value={property.status}
               onChange={updateState}
             ></Dropdown>
           </div>
@@ -193,6 +207,7 @@ function AddProperty() {
               options={publishStatus}
               className="w-full md:w-14rem"
               placeholder="Select"
+              value={property.publish_status}
               onChange={updateState}
             ></Dropdown>
           </div>
@@ -207,6 +222,7 @@ function AddProperty() {
               placeholder="Select"
               optionLabel="name"
               optionValue="id"
+              value={property.PropertyTypeId}
               onChange={updateState}
             ></Dropdown>
           </div>
@@ -221,6 +237,7 @@ function AddProperty() {
               placeholder="Select"
               optionLabel="name"
               optionValue="id"
+              value={property.LocationId}
               onChange={updateState}
             ></Dropdown>
           </div>
@@ -235,6 +252,7 @@ function AddProperty() {
               placeholder="Select"
               optionLabel="name"
               optionValue="id"
+              value={property.TeamId}
               onChange={updateState}
             ></Dropdown>
           </div>
@@ -265,13 +283,18 @@ function AddProperty() {
               name="description"
               className="form-control property-description"
               rows="8"
+              value={property.description}
               onChange={updateState}
             ></InputTextarea>
           </div>
         </div>
 
         {/* Metadata */}
-        <MetadataForm title={""} description={""} updateState={updateState} />
+        <MetadataForm
+          title={property.metadata_title}
+          description={property.metadata_description}
+          updateState={updateState}
+        />
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
           <Button label="Save" onClick={handleSave} />
