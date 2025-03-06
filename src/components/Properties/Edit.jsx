@@ -13,7 +13,6 @@ import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
 import useFetchLocations from "../../hooks/useFetchLocations";
 import useFetchTeams from "../../hooks/useFetchTeams";
 import useFetchAmenities from "../../hooks/useFetchAmenities";
-import MetadataFrom from "../Blogs/Metadata-form";
 import { populateFormData } from "../../helpers";
 import Errors from "../Layouts/Errors";
 import MetadataForm from "../Blogs/Metadata-form";
@@ -95,6 +94,11 @@ function EditProperty() {
       {/* Errors */}
       {errors && <Errors errors={errors} />}
 
+      <div className="d-flex justify-content-end mb-2">
+        <Button label="Add Images"></Button>
+      </div>
+
+      {/* Form */}
       <form>
         <div className="row">
           <div className="col-md-12">
