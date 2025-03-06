@@ -1,23 +1,23 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Dropdown } from 'primereact/dropdown';
-import { MultiSelect } from 'primereact/multiselect';
-import { Image } from 'primereact/image';
-import { Button } from 'primereact/button';
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
+import { MultiSelect } from "primereact/multiselect";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
 
-import { propertyStatus, publishStatus } from '../../constants/properties';
-import useFetchPropertyTypes from '../../hooks/useFetchPropertyTypes';
-import useFetchTeams from '../../hooks/useFetchTeams';
-import useFetchLocations from '../../hooks/useFetchLocations';
-import useFetchAmenities from '../../hooks/useFetchAmenities';
-import { populateFormData } from '../../helpers';
-import { propertyTemplate } from '../../constants';
-import { saveData } from '../../services/Property';
-import MetadataForm from '../Blogs/Metadata-form';
-import Errors from '../Layouts/Errors';
-import Blog from '../../assets/blog.jpg';
+import { propertyStatus, publishStatus } from "../../constants/properties";
+import useFetchPropertyTypes from "../../hooks/useFetchPropertyTypes";
+import useFetchTeams from "../../hooks/useFetchTeams";
+import useFetchLocations from "../../hooks/useFetchLocations";
+import useFetchAmenities from "../../hooks/useFetchAmenities";
+import { populateFormData } from "../../helpers";
+import { propertyTemplate } from "../../constants";
+import { saveData } from "../../services/Property";
+import MetadataForm from "../Blogs/Metadata-form";
+import Errors from "../Layouts/Errors";
+import Blog from "../../assets/blog.jpg";
 
 function AddProperty() {
   const [file, setFile] = useState(Blog);
@@ -42,7 +42,7 @@ function AddProperty() {
   const handleCancel = (e) => {
     e.preventDefault();
 
-    navigate('/properties');
+    navigate("/properties");
   };
 
   const handleSave = async (e) => {
@@ -50,13 +50,17 @@ function AddProperty() {
 
     // Add data in form object (for image)
     const formData = populateFormData(property);
-    console.log(formData);
 
     try {
       await saveData(formData);
       setErrors(null);
+
+      navigate("/properties", {
+        state: { showMessage: true },
+      });
     } catch (error) {
       setErrors(error.response.data.messages);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -267,6 +271,7 @@ function AddProperty() {
               optionLabel="name"
               optionValue="id"
               options={amenities}
+              value={property.Amenities}
               onChange={(e) =>
                 setProperty({
                   ...property,

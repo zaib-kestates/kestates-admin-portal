@@ -65,6 +65,7 @@ function EditProperty() {
       });
     } catch (error) {
       setErrors(error.response.data.messages);
+      window.scrollTo(0,0);
     }
   };
 
