@@ -12,6 +12,7 @@ import useFetchLanguages from "../../hooks/useFetchLanguages";
 import ProfilePicture from "../../assets/user-prof.png";
 import { saveData } from "../../services/Team";
 import { teamObject } from "../../constants";
+import MetadataForm from "../Blogs/Metadata-form";
 import { STATUS } from "../../constants/common";
 import { populateFormData } from "../../helpers";
 import Errors from "../Layouts/Errors";
@@ -67,7 +68,7 @@ function AddTeam() {
       });
     } catch (error) {
       setErrors(error.response.data.messages);
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }
   };
 
@@ -208,7 +209,9 @@ function AddTeam() {
             ></InputText>
           </div>
           <div className="col-md-3 mt-2 pt-2">
-            <label htmlFor="status" className="control-label">Status</label>
+            <label htmlFor="status" className="control-label">
+              Status
+            </label>
             <Dropdown
               id="status"
               name="status"
@@ -220,6 +223,14 @@ function AddTeam() {
             ></Dropdown>
           </div>
         </div>
+
+        {/* Metadata */}
+        <MetadataForm
+          title={team.metadata_title}
+          description={team.metadata_description}
+          canonical_url={team.metadata_canonical_url}
+          updateState={updateState}
+        />
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
           <Button label="Save" onClick={save} />

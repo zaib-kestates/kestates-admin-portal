@@ -12,6 +12,7 @@ import useFetchDepartments from "../../hooks/useFetchDepartments";
 import useFetchLanguages from "../../hooks/useFetchLanguages";
 import { populateFormData } from "../../helpers";
 import { STATUS } from "../../constants/common";
+import MetadataForm from "../Blogs/Metadata-form";
 import Errors from "../Layouts/Errors";
 
 function EditTeam() {
@@ -232,6 +233,14 @@ function EditTeam() {
             ></Dropdown>
           </div>
         </div>
+
+        {/* Metadata */}
+        <MetadataForm
+          title={team.metadata_title}
+          description={team.metadata_description}
+          canonical_url={team.metadata_canonical_url}
+          updateState={updateState}
+        />
 
         <div className="col-md-12 mt-2 pt-2 d-flex justify-content-end">
           <Button label="Save" onClick={save} />
