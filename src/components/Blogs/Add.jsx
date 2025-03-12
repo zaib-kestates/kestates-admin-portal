@@ -168,6 +168,7 @@ function AddBlog() {
         <MetadataForm
           title={blog.metadata_title}
           description={blog.metadata_description}
+          canonical_url={blog.metadata_canonical_url}
           updateState={updateState}
         />
 

@@ -73,6 +73,16 @@ function Metadata({ handleCancel }) {
             ></InputText>
           </div>
           <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="canonical_url" className="control-label">
+              Canonical URL
+            </label>
+            <InputText
+              name="canonical_url"
+              className="form-control"
+              value={metadata.canonical_url}
+              onChange={updateState}></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
             <label htmlFor="description" className="control-label">
               Description
             </label>

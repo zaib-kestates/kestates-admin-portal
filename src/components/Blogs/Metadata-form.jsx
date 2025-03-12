@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 
-function MetadataForm({ title, description, updateState }) {
+function MetadataForm({ title, description, canonical_url, updateState }) {
   return (
     <>
       <label className="page-subheader mt-3 pt-2">Metadata</label>
@@ -18,6 +18,16 @@ function MetadataForm({ title, description, updateState }) {
             value={title}
             onChange={updateState}
           ></InputText>
+        </div>
+        <div className="col-md-12 mt-2 pt-2">
+          <label htmlFor="canonical_url" className="control-lanel">
+            Canonical URL
+          </label>
+          <InputText
+            name="metadata_canonical_url"
+            className="form-control"
+            value={canonical_url}
+            onChange={updateState}></InputText>
         </div>
         <div className="col-md-12 mt-2 pt-2">
           <label htmlFor="description">Description</label>
@@ -37,6 +47,7 @@ function MetadataForm({ title, description, updateState }) {
 MetadataForm.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
+  canonical_url: PropTypes.string,
   updateState: PropTypes.func,
 };
 

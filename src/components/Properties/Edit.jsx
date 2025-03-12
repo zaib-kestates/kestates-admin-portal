@@ -314,6 +314,7 @@ function EditProperty() {
         <MetadataForm
           title={property.metadata_title}
           description={property.metadata_description}
+          canonical_url={property.metadata_canonical_url}
           updateState={updateState}
         />
 

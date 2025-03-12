@@ -64,6 +64,7 @@ function Home() {
     formData.append('header', data.metadata.header);
     formData.append('title', data.metadata.title);
     formData.append('description', data.metadata.description);
+    formData.append('canonical_url', data.metadata.canonical_url);
     formData.append('our_story', data.pageData[0].value);
     formData.append('file', data.file);
     window.scrollTo(0, 0);
@@ -162,6 +163,16 @@ function Home() {
               value={data.metadata.header}
               onChange={updateMetadata}
             ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="canonical_url" className="control-label">
+              Canonical URL
+            </label>
+            <InputText
+              name="canonical_url"
+              className="form-control"
+              value={data.metadata.canonical_url}
+              onChange={updateMetadata}></InputText>
           </div>
           <div className="col-md-12 mt-2 pt-2">
             <label htmlFor="description">Description</label>

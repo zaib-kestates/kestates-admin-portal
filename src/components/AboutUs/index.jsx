@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Button } from 'primereact/button';
-import { Image } from 'primereact/image';
-import { Messages } from 'primereact/messages';
+import { useState, useEffect, useRef } from "react";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
+import { Image } from "primereact/image";
+import { Messages } from "primereact/messages";
 
-import { messageTemplate } from '../../constants';
-import { getData, saveData } from '../../services/AboutUs';
-import Errors from '../Layouts/Errors';
-import './index.css';
+import { messageTemplate } from "../../constants";
+import { getData, saveData } from "../../services/AboutUs";
+import Errors from "../Layouts/Errors";
+import "./index.css";
 
 function AboutUs() {
   const bannerRef = useRef(null);
@@ -49,13 +49,14 @@ function AboutUs() {
 
     // Add data in form object (for images)
     const formData = new FormData();
-    formData.append('header', data.metadata.header);
-    formData.append('title', data.metadata.title);
-    formData.append('description', data.metadata.description);
-    formData.append('about', data.pageData[0].value);
-    formData.append('team', data.pageData[1].value);
-    formData.append('file1', file1);
-    formData.append('file2', file2);
+    formData.append("header", data.metadata.header);
+    formData.append("title", data.metadata.title);
+    formData.append("description", data.metadata.description);
+    formData.append("canonical_url", data.metadata.canonical_url);
+    formData.append("about", data.pageData[0].value);
+    formData.append("team", data.pageData[1].value);
+    formData.append("file1", file1);
+    formData.append("file2", file2);
     window.scrollTo(0, 0);
 
     console.log(formData);
@@ -65,7 +66,7 @@ function AboutUs() {
       setErrors(null);
 
       message.current.show(
-        messageTemplate('success', 'Data saved successfully')
+        messageTemplate("success", "Data saved successfully")
       );
     } catch (error) {
       setErrors(error.response.data.messages);
@@ -182,6 +183,17 @@ function AboutUs() {
               name="header"
               className="form-control"
               value={data.metadata.header}
+              onChange={updateMetadata}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="canonical_url" className="control-label">
+              Canonical URL
+            </label>
+            <InputText
+              name="canonical_url"
+              className="form-control"
+              value={data.metadata.canonical_url}
               onChange={updateMetadata}
             ></InputText>
           </div>
