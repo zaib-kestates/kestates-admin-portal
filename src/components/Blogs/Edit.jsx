@@ -179,6 +179,7 @@ function EditBlog() {
           title={blog.metadata_title}
           description={blog.metadata_description}
           canonical_url={blog.metadata_canonical_url}
+          focus_keywords={blog.metadata_focus_keywords}
           updateState={updateState}
         />
 

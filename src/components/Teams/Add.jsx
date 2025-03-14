@@ -229,6 +229,7 @@ function AddTeam() {
           title={team.metadata_title}
           description={team.metadata_description}
           canonical_url={team.metadata_canonical_url}
+          focus_keywords={team.metadata_focus_keywords}
           updateState={updateState}
         />
 

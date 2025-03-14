@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Button } from 'primereact/button';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from "react";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
+import PropTypes from "prop-types";
 
-import { getData, saveData } from '../../services/Metadata';
-import Errors from '../Layouts/Errors';
+import { getData, saveData } from "../../services/Metadata";
+import Errors from "../Layouts/Errors";
 
 function Metadata({ handleCancel }) {
   const [metadata, setMetadata] = useState();
@@ -24,7 +24,7 @@ function Metadata({ handleCancel }) {
     e.preventDefault();
 
     try {
-      await saveData(metadata, 'teams');
+      await saveData(metadata, "teams");
       handleCancel(e, true);
     } catch (error) {
       setErrors(error.response.data.messages);
@@ -33,7 +33,7 @@ function Metadata({ handleCancel }) {
 
   // Function to get metadata
   const getMetadata = async () => {
-    const data = await getData('teams');
+    const data = await getData("teams");
     setMetadata(data);
   };
 
@@ -80,7 +80,19 @@ function Metadata({ handleCancel }) {
               name="canonical_url"
               className="form-control"
               value={metadata.canonical_url}
-              onChange={updateState}></InputText>
+              onChange={updateState}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="focus_keywords" className="control-label">
+              Focus Keywords
+            </label>
+            <InputText
+              name="focus_keywords"
+              className="form-control"
+              value={metadata.focus_keywords}
+              onChange={updateState}
+            ></InputText>
           </div>
           <div className="col-md-12 mt-2 pt-2">
             <label htmlFor="description" className="control-label">

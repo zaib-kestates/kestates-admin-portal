@@ -299,6 +299,7 @@ function AddProperty() {
           title={property.metadata_title}
           description={property.metadata_description}
           canonical_url={property.metadata_canonical_url}
+          focus_keywords={property.metadata_focus_keywords}
           updateState={updateState}
         />
 

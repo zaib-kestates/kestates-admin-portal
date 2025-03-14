@@ -53,6 +53,7 @@ function AboutUs() {
     formData.append("title", data.metadata.title);
     formData.append("description", data.metadata.description);
     formData.append("canonical_url", data.metadata.canonical_url);
+    formData.append("focus_keywords", data.metadata.focus_keywords);
     formData.append("about", data.pageData[0].value);
     formData.append("team", data.pageData[1].value);
     formData.append("file1", file1);
@@ -194,6 +195,17 @@ function AboutUs() {
               name="canonical_url"
               className="form-control"
               value={data.metadata.canonical_url}
+              onChange={updateMetadata}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="focus_keywords" className="control-label">
+              Focus Keywords
+            </label>
+            <InputText
+              name="focus_keywords"
+              className="form-control"
+              value={data.metadata.focus_keywords}
               onChange={updateMetadata}
             ></InputText>
           </div>

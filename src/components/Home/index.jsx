@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { Button } from 'primereact/button';
-import { Messages } from 'primereact/messages';
+import React, { useState, useEffect, useRef } from "react";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
+import { Messages } from "primereact/messages";
 
-import { getData, saveData } from '../../services/Home';
-import { messageTemplate } from '../../constants';
-import Errors from '../Layouts/Errors';
-import './index.css';
+import { getData, saveData } from "../../services/Home";
+import { messageTemplate } from "../../constants";
+import Errors from "../Layouts/Errors";
+import "./index.css";
 
 function Home() {
   const videoRef = useRef(null);
@@ -61,19 +61,20 @@ function Home() {
 
     // Add data in form object (for video)
     const formData = new FormData();
-    formData.append('header', data.metadata.header);
-    formData.append('title', data.metadata.title);
-    formData.append('description', data.metadata.description);
-    formData.append('canonical_url', data.metadata.canonical_url);
-    formData.append('our_story', data.pageData[0].value);
-    formData.append('file', data.file);
+    formData.append("header", data.metadata.header);
+    formData.append("title", data.metadata.title);
+    formData.append("description", data.metadata.description);
+    formData.append("canonical_url", data.metadata.canonical_url);
+    formData.append("focus_keywords", data.metadata.focus_keywords);
+    formData.append("our_story", data.pageData[0].value);
+    formData.append("file", data.file);
     window.scrollTo(0, 0);
 
     try {
       await saveData(formData);
       setErrors(null);
       message.current.show(
-        messageTemplate('success', 'Data saved successfully')
+        messageTemplate("success", "Data saved successfully")
       );
     } catch (error) {
       setErrors(error.response.data.messages);
@@ -172,7 +173,19 @@ function Home() {
               name="canonical_url"
               className="form-control"
               value={data.metadata.canonical_url}
-              onChange={updateMetadata}></InputText>
+              onChange={updateMetadata}
+            ></InputText>
+          </div>
+          <div className="col-md-12 mt-2 pt-2">
+            <label htmlFor="focus_keywords" className="control-label">
+              Focus Keywords
+            </label>
+            <InputText
+              name="focus_keywords"
+              className="form-control"
+              value={data.metadata.focus_keywords}
+              onChange={updateMetadata}
+            ></InputText>
           </div>
           <div className="col-md-12 mt-2 pt-2">
             <label htmlFor="description">Description</label>

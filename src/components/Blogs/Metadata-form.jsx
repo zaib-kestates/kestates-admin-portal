@@ -3,7 +3,13 @@ import PropTypes from "prop-types";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 
-function MetadataForm({ title, description, canonical_url, updateState }) {
+function MetadataForm({
+  title,
+  description,
+  canonical_url,
+  focus_keywords,
+  updateState,
+}) {
   return (
     <>
       <label className="page-subheader mt-3 pt-2">Metadata</label>
@@ -27,7 +33,19 @@ function MetadataForm({ title, description, canonical_url, updateState }) {
             name="metadata_canonical_url"
             className="form-control"
             value={canonical_url}
-            onChange={updateState}></InputText>
+            onChange={updateState}
+          ></InputText>
+        </div>
+        <div className="col-md-12 mt-2 pt-2">
+          <label htmlFor="focus_keywords" className="control-label">
+            Focus Keywords
+          </label>
+          <InputText
+            name="metadata_focus_keywords"
+            className="form-control"
+            value={focus_keywords}
+            onChange={updateState}
+          ></InputText>
         </div>
         <div className="col-md-12 mt-2 pt-2">
           <label htmlFor="description">Description</label>
@@ -48,6 +66,7 @@ MetadataForm.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   canonical_url: PropTypes.string,
+  focus_keywords: PropTypes.string,
   updateState: PropTypes.func,
 };
 
