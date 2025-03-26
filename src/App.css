@@ -204,3 +204,7 @@ div.alert {
 .p-multiselect-label {
   white-space: collapse;
 }
+
+div[data-pc-section="toolbar"]{
+  display: none;
+}

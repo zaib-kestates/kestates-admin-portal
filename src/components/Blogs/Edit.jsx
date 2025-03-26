@@ -72,6 +72,24 @@ function EditBlog() {
     fetchData();
   }, []);
 
+
+  const customModules = {
+    toolbar: [
+      [{ 'header': [1, 2, 3, false] }], // H2, H3, and normal text
+      ['bold', 'italic', 'underline'],
+      [{ 'color': [] }, { 'background': [] }], // Text color & background color
+      [{ 'align': [] }], // Text alignment
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['link', 'image']
+    ]
+  };
+  const customFormats = [
+    'header', 'bold', 'italic', 'underline',
+    'color', 'background', // Text color & bg color
+    'align', // Text alignment
+    'list', 'bullet', 'link', 'image'
+  ];
+
   if (!blog) return;
   return (
     <>
@@ -168,6 +186,8 @@ function EditBlog() {
             Description
           </label>
           <Editor
+            modules={customModules}
+            formats={customFormats}
             name="description"
             value={blog.description}
             onTextChange={(e) => setBlog({ ...blog, description: e.htmlValue })}
